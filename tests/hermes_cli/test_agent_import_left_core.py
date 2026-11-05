@@ -34,9 +34,9 @@ def test_old_spelling_without_the_plugin_names_the_install(argv, tmp_path, monke
         parser.parse_args(sys.argv[1:])
     err = capsys.readouterr().err
     assert exc.value.code == 2
-    assert f"`hermes {argv[0]}` moved out of core into the 'agent-importers' plugin, which is not loaded" in err
-    assert "hermes plugins install agent-importers" in err
-    assert lcm.moved_command_hint("hermes auth", argv[0]) == ""  # never a `hermes auth` login spelling
+    assert f"`huntington {argv[0]}` moved out of core into the 'agent-importers' plugin, which is not loaded" in err
+    assert "huntington plugins install agent-importers" in err
+    assert lcm.moved_command_hint("huntington auth", argv[0]) == ""  # never a `hermes auth` login spelling
 
 
 def test_only_a_home_with_registered_imports_gets_the_plugin(tmp_path):

@@ -1,0 +1,82 @@
+name: HUNTINGTON-AGENT CI
+
+# Fork CI on GitHub-hosted runners. Upstream's workflows (NousResearch runners and secrets) are
+# removed via huntington/removed-paths.txt; this file and huntington-upstream-sync.yml replace them.
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: huntington-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  fork-checks:
+    name: Fork invariants, lint, policy tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Rebrand is complete
+        run: python scripts/huntington/rebrand.py --check
+      - name: Removed paths stay removed
+        run: |
+          scripts/huntington/sync-upstream.sh --apply
+          git diff --exit-code --stat || { echo "::error::paths from huntington/removed-paths.txt are back"; exit 1; }
+      - name: Build the test environment
+        run: python -m pm.build_env --source . --out .venv --group dev --group test
+      - name: Lint and code-health ratchet
+        run: .venv/bin/python scripts/check
+      - name: Fork policy contract
+        run: scripts/run_tests.sh tests/hermes_cli/test_huntington_policy.py
+
+  tests:
+    name: Test suite (slice ${{ matrix.slice }}/4)
+    runs-on: ubuntu-latest
+    timeout-minutes: 150
+    strategy:
+      fail-fast: false
+      matrix:
+        slice: [1, 2, 3, 4]
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7.0.1
+      # The PM toolchain from pm/lock.json, as upstream's setup-pm action installs it (without
+      # its NousResearch caches): the pinned Python, uv on PATH (the PM, install and plugin
+      # admission suites drive real uv) and the isolated dev+test environment in HERMES_PYTHON.
+      - name: Install ripgrep (prebuilt binary)
+        # The search tool's tests drive real rg; the same pinned release upstream's CI installs.
+        run: |
+          set -euo pipefail
+          RG_VERSION=15.1.0
+          RG_SHA256=1c9297be4a084eea7ecaedf93eb03d058d6faae29bbc57ecdaf5063921491599
+          RG_TARBALL=ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl.tar.gz
+          curl -sSfL --retry 3 --retry-delay 5 -o "$RG_TARBALL" \
+            "https://github.com/BurntSushi/ripgrep/releases/download/${RG_VERSION}/${RG_TARBALL}"
+          echo "${RG_SHA256}  ${RG_TARBALL}" | sha256sum -c -
+          tar -xzf "$RG_TARBALL"
+          sudo mv "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl/rg" /usr/local/bin/rg
+          rm -rf "$RG_TARBALL" "ripgrep-${RG_VERSION}-x86_64-unknown-linux-musl"
+          rg --version
+      - name: Install the locked Python and uv
+        run: |
+          python3 -S scripts/ci/setup_toolchain.py prepare --toolchain python --extras '' --home "$RUNNER_TEMP/setup-pm"
+          python3 -S scripts/ci/setup_toolchain.py install --toolchain python --home "$RUNNER_TEMP/setup-pm"
+      - name: Build the test environment
+        run: |
+          "$HERMES_PYTHON" -S scripts/ci/setup_toolchain.py dependencies --toolchain python \
+            --extras '["all", "anthropic"]' --test-environment --home "$HERMES_HOME"
+      - name: Run slice
+        run: scripts/run_tests.sh --slice ${{ matrix.slice }}/4
+        env:
+          OPENROUTER_API_KEY: ""

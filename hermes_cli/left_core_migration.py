@@ -675,7 +675,7 @@ def moved_command_hint(prog: str, value: str, action: str = "") -> str:
         present = plugin_present(moved.plugin, home)
         get = "" if present else f" Install it with: `{_install_command(moved.plugin, home)}`."
         return (f"{moved.label} moved out of core into the '{moved.plugin}' plugin: `{moved.old_command}` is now "
-                f"`hermes {moved.command}`.{get}")
+                f"`huntington {moved.command}`.{get}")
     if prog == "hermes auth":
         feature = next((f for f in LEFT_CORE if f.cli and f.cli == value), None)
     elif prog == "hermes":
@@ -692,8 +692,8 @@ def moved_command_hint(prog: str, value: str, action: str = "") -> str:
     if prog == "hermes auth":
         old = " ".join(p for p in ("hermes auth", action, value) if p)
         return (f"{feature.label} moved out of core into the '{feature.plugin}' plugin: `{old}` is now "
-                f"`hermes {value} {action or 'login'}`.{get}")
-    label = f"`hermes {value}`" if value in feature.old_cli else feature.label
+                f"`huntington {value} {action or 'login'}`.{get}")
+    label = f"`huntington {value}`" if value in feature.old_cli else feature.label
     return f"{label} moved out of core into the '{feature.plugin}' plugin, which is not loaded.{get}"
 
 

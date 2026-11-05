@@ -42,7 +42,7 @@ def plan_data_removal(home: Path, project: Path, userdata: Path | None = None) -
         except NotBundledApp as exc:
             raise ValueError(str(exc)) from exc
     # The canonical source installation may coexist with the invoking package.
-    canonical = home / "hermes-agent"
+    canonical = home / "huntington-agent"
     if (canonical / "hermes_cli" / "__init__.py").is_file():
         protected.add(canonical)
     remove: list[Path] = []

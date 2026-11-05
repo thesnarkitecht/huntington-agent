@@ -50,7 +50,7 @@ def _checkout(tmp_path, monkeypatch, *, parent: Path | None = None) -> Path:
     monkeypatch.setattr(hermes_constants, "_get_platform_default_hermes_home", lambda: tmp_path / ".huntington")
     monkeypatch.delenv("HERMES_DISABLE_LAZY_INSTALLS", raising=False)
     monkeypatch.delenv("HERMES_RUNTIME_DIR", raising=False)
-    root = (parent or tmp_path / ".huntington") / "hermes-agent"
+    root = (parent or tmp_path / ".huntington") / "huntington-agent"
     root.mkdir(parents=True)
     (root / ".git").mkdir()
     (root / "pyproject.toml").write_text("[project]\nname='example'\n", encoding="utf-8")

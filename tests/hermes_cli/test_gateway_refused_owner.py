@@ -47,7 +47,7 @@ def _gateway_child(tmp_path: Path):
 
 def _record(home: Path, pid: int, **extra) -> dict:
     from gateway.status import _get_process_start_time
-    return {"pid": pid, "kind": "hermes-gateway", "argv": ["hermes", "gateway", "run"],
+    return {"pid": pid, "kind": "huntington-gateway", "argv": ["hermes", "gateway", "run"],
             "start_time": _get_process_start_time(pid), "hermes_home": str(home), **extra}
 
 
@@ -84,7 +84,7 @@ def test_refusal_names_the_elevated_owner_with_its_remedy(monkeypatch, tmp_path,
     home, _ = _refusing_owner(monkeypatch, tmp_path, named, gateway_owner)
     result = runtime._refused(home, windows=True)
     assert result.reason_code == "gateway_elevated"
-    assert result.detail and "administrator" in result.detail and "hermes gateway stop" in result.detail
+    assert result.detail and "administrator" in result.detail and "huntington gateway stop" in result.detail
 
 
 def test_unnamed_or_unprobeable_refusal_keeps_authorization(monkeypatch, tmp_path, gateway_owner):

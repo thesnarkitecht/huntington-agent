@@ -155,6 +155,9 @@ def anon_failure_copy(code: str, *, retry_after: Any = None) -> str:
 
 def guest_allowed() -> bool:
     """``nous.guest`` (default True) has not switched guests off: no connector guest, no trial."""
+    from hermes_cli.huntington import provider_supported
+    if not provider_supported("nous"):
+        return False  # HUNTINGTON-AGENT: the Nous Portal is not a supported provider
     try:
         from hermes_cli.config import load_config_readonly
         nous_cfg = load_config_readonly().get("nous")

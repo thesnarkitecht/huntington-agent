@@ -27,7 +27,7 @@ def xdg_home(tmp_path, monkeypatch) -> Path:
 
 
 def _make_project(tmp_path: Path) -> Path:
-    root = tmp_path / "hermes-agent"
+    root = tmp_path / "huntington-agent"
     icon = root / "apps" / "desktop" / "assets" / "icon.png"
     icon.parent.mkdir(parents=True)
     icon.write_bytes(b"\x89PNG fake")
@@ -827,7 +827,7 @@ def test_install_is_idempotent_and_skips_cache_refresh(tmp_path, xdg_home, monke
 
 
 def test_install_without_source_icon_uses_themed_name(tmp_path, xdg_home, monkeypatch):
-    root = tmp_path / "hermes-agent"
+    root = tmp_path / "huntington-agent"
     root.mkdir()
     monkeypatch.setattr(
         "hermes_cli.relaunch.resolve_hermes_bin", lambda: "/usr/bin/hermes"
@@ -999,7 +999,7 @@ def test_wrapper_ownership_rejects_sibling_extensions(suffix, tmp_path):
     must reject them (stable-but-wrong entry pointing at the renamed
     old install).
     """
-    checkout = tmp_path / "hermes-agent"
+    checkout = tmp_path / "huntington-agent"
     checkout.mkdir()
     evil = tmp_path / "evil-shim"
     evil.write_text(
@@ -1025,8 +1025,8 @@ def test_wrapper_ownership_accepts_shim_via_symlinked_home(tmp_path, monkeypatch
     home_real = tmp_path / "home-real"
     home_real.mkdir()
     home_link.symlink_to(home_real)
-    lexical_checkout = home_link / "hermes-agent"
-    (home_real / "hermes-agent").mkdir()
+    lexical_checkout = home_link / "huntington-agent"
+    (home_real / "huntington-agent").mkdir()
 
     shim = home_link / ".local" / "bin" / "hermes"
     shim.parent.mkdir(parents=True)

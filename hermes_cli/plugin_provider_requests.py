@@ -58,8 +58,7 @@ def _codex_auth(url: str) -> tuple[dict[str, str], str]:
     token = str(creds.get("api_key") or "").strip()
     if not token:
         raise ProviderNotSignedIn(
-            f"Not signed in to Codex in Huntington. Run `{oauth_relogin_command('openai-codex')}` "
-            "or sign in to OpenAI Codex under Providers in the Huntington desktop app.")
+            f"Not signed in to Codex in Huntington. Run `{oauth_relogin_command('openai-codex')}`.")
     headers = codex_account_headers(token) if url_origin(url)[1] == "chatgpt.com" else {}
     headers["Authorization"] = f"Bearer {token}"
     return headers, str(creds.get("base_url") or "")

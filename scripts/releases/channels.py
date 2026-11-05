@@ -96,7 +96,7 @@ def preview_identity(name: str, token: str) -> dict:
     validate_name(name)
     pascal = f"HermesChannel{token}"
     return {"token": token, "displayName": f"Huntington {name}",
-            "appId": f"ai.hermes.channel.h{token}", "appNamePascal": pascal,
+            "appId": f"ai.huntington.channel.h{token}", "appNamePascal": pascal,
             "artifactNamePascal": pascal, "cliName": f"hermes-{name}",
             "windowsExecutableName": pascal, "msixAppIdWithOrg": f"NousResearch.{pascal}"}
 

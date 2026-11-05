@@ -37,7 +37,7 @@ def test_manual_deferral_survives_receipt_rotation(monkeypatch, capsys, kind, co
     elif condition == "missing-identity":
         runtime.detail.clear()
     elif condition == "failed-unit":
-        restart.failed_or_stale_units.append("hermes-serve-work.service")
+        restart.failed_or_stale_units.append("huntington-serve-work.service")
         restart.incomplete = True
     if condition != "alive":
         # Contract C3: a restart that is still owed no longer fails the committed update (was
@@ -54,14 +54,14 @@ def test_manual_deferral_survives_receipt_rotation(monkeypatch, capsys, kind, co
     receipt = update_receipt.read_latest_receipt()
     assert receipt["runtime_outcomes"][0]["outcome"] == "deferred"
     assert not fleet._fleet_restart_obligation_armed()
-    assert "hermes-serve.service" not in capsys.readouterr().out
+    assert "huntington-serve.service" not in capsys.readouterr().out
     update_receipt.begin_update_receipt()
     update_receipt.finalize_update_receipt("success", fleet=[])
     fleet._warn_pending_fleet_restart_on_startup()
     warning = capsys.readouterr().err
     assert f"{kind} [work] pid 900" in warning
     assert "relaunch" in warning
-    assert "hermes gateway restart" not in warning
+    assert "huntington gateway restart" not in warning
     monkeypatch.setattr(process_identity, "_pid_alive_matches", lambda *a: None)
     fleet._warn_pending_fleet_restart_on_startup()
     assert "900" in capsys.readouterr().err
@@ -101,7 +101,7 @@ def test_historical_manual_obligation_does_not_block_healthy_gateway(monkeypatch
     fleet._warn_pending_fleet_restart_on_startup()
     warning = capsys.readouterr().err
     assert ("serve [work] pid 900" in warning) is (alive is not False)
-    assert "hermes gateway restart" not in warning
+    assert "huntington gateway restart" not in warning
     assert json.loads((root / "latest.json").read_text()) == receipt
 
 
@@ -125,7 +125,7 @@ def test_stamped_manual_only_history_has_no_gateway_obligation(monkeypatch, caps
     fleet._warn_pending_fleet_restart_on_startup()
     warning = capsys.readouterr().err
     assert "serve [work] pid 900" in warning
-    assert "hermes gateway restart" not in warning
+    assert "huntington gateway restart" not in warning
 
 
 @pytest.mark.parametrize("manual_first", [True, False])

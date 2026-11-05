@@ -70,7 +70,7 @@ class TestDetectToolFailureTerminal:
         is_failure, suffix = _detect_tool_failure("terminal", result)
         assert is_failure is True
         assert "unix:///var/run/docker.sock" in suffix
-        assert "hermes setup terminal" in suffix
+        assert "huntington setup terminal" in suffix
         assert "Terminal backend degraded:" not in suffix
 
     def test_nonzero_dict_result_is_a_failure(self):

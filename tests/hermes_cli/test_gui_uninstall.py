@@ -16,7 +16,7 @@ import hermes_cli.gui_uninstall as gu
 
 def _make_agent(hermes_home: Path) -> Path:
     """Create a fake agent install: source package + venv."""
-    agent_root = hermes_home / "hermes-agent"
+    agent_root = hermes_home / "huntington-agent"
     (agent_root / "hermes_cli").mkdir(parents=True)
     (agent_root / "hermes_cli" / "__init__.py").write_text("")
     (agent_root / "venv" / "bin").mkdir(parents=True)
@@ -25,12 +25,12 @@ def _make_agent(hermes_home: Path) -> Path:
 
 def _make_gui_build(hermes_home: Path) -> None:
     """Create the source-built GUI artifacts a `hermes desktop` run produces."""
-    desktop = hermes_home / "hermes-agent" / "apps" / "desktop"
+    desktop = hermes_home / "huntington-agent" / "apps" / "desktop"
     (desktop / "dist").mkdir(parents=True)
     (desktop / "dist" / "index.html").write_text("<html>")
     (desktop / "release" / "linux-unpacked").mkdir(parents=True)
     (desktop / "node_modules").mkdir(parents=True)
-    (hermes_home / "hermes-agent" / "node_modules").mkdir(parents=True)
+    (hermes_home / "huntington-agent" / "node_modules").mkdir(parents=True)
     (hermes_home / "desktop-build-stamp.json").write_text("{}")
 
 
@@ -72,7 +72,7 @@ def test_uninstall_removes_launcher_entry_and_refreshes_cache(tmp_path, monkeypa
 
     hermes_home = tmp_path / ".huntington"
     _make_agent(hermes_home)
-    icon = lde.icon_path(hermes_home / "hermes-agent")
+    icon = lde.icon_path(hermes_home / "huntington-agent")
     icon.parent.mkdir(parents=True, exist_ok=True)
     icon.write_bytes(b"\x89PNG")
     monkeypatch.setattr(gu, "desktop_userdata_dir", lambda: tmp_path / "none")
@@ -83,9 +83,9 @@ def test_uninstall_removes_launcher_entry_and_refreshes_cache(tmp_path, monkeypa
     assert legacy_alias in removed and not legacy_alias.exists()
     assert refreshed == [entry.parent]
     # The icon lives in the checkout. A GUI uninstall must not delete it.
-    assert lde.icon_path(hermes_home / "hermes-agent").exists()
+    assert lde.icon_path(hermes_home / "huntington-agent").exists()
     # The agent itself survives a GUI uninstall.
-    assert (hermes_home / "hermes-agent" / "hermes_cli").is_dir()
+    assert (hermes_home / "huntington-agent" / "hermes_cli").is_dir()
 
 
 @pytest.mark.platforms("posix")  # POSIX symlink semantics

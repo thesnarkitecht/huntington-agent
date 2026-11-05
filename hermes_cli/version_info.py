@@ -79,7 +79,7 @@ def _resolve_repo_dir() -> Path | None:
     # process-wide, so a profile's context-local override must not pick it.
     from hermes_constants import get_process_hermes_home
 
-    candidate = get_process_hermes_home() / "hermes-agent"
+    candidate = get_process_hermes_home() / "huntington-agent"
     if (candidate / ".git").exists():
         return candidate
     return None

@@ -2,7 +2,7 @@
 name: microsoft-office
 description: Create, read, and edit Word, PowerPoint, and Excel files.
 version: 2.0.0
-author: Nous Research
+author: HIP
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
@@ -42,17 +42,17 @@ Deeper notes: `references/revisions-and-comments.md` (Word review markup) and
 - Python 3.10+ with `python-docx`, `python-pptx`, and `openpyxl` (import names
   `docx`, `pptx`, `openpyxl`).
 - Pick the interpreter with `terminal`. Use `python` when it already imports
-  the libraries (the Hermes Docker image ships them). Otherwise, when `hermes`
-  is on PATH, let Hermes build its shared, pinned documents environment under
-  the Hermes home: it survives container restarts, never touches the Hermes
+  the libraries (the Huntington Docker image ships them). Otherwise, when `huntington`
+  is on PATH, let Huntington build its shared, pinned documents environment under
+  the Huntington home: it survives container restarts, never touches the Huntington
   install itself, and is safe to run from several agents at once. When it is
-  not (the terminal runs in a Docker sandbox, which has no Hermes), the block
+  not (the terminal runs in a Docker sandbox, which has no Huntington), the block
   builds a venv in the sandbox home with the same pinned versions. Use this
   exact block in every document skill so they all share one environment:
 
   ```bash
   python -c "import docx, pptx, openpyxl" 2>/dev/null && PY=python || if command -v hermes >/dev/null 2>&1; then
-    PY="$(hermes pm environment documents --extra documents --extra documents-pdf)"
+    PY="$(huntington pm environment documents --extra documents --extra documents-pdf)"
   else
     PY="$HOME/.cache/hermes-docs-venv/bin/python"
     "$PY" -c "import docx, openpyxl, pptx, reportlab, pypdf, pdfplumber, pypdfium2" 2>/dev/null || (
@@ -76,11 +76,11 @@ Deeper notes: `references/revisions-and-comments.md` (Word review markup) and
   "$PY" scripts/docx_create.py --help
   ```
 
-  Run every helper with `"$PY"`. In PowerShell (Hermes runs on that host, so
+  Run every helper with `"$PY"`. In PowerShell (Huntington runs on that host, so
   it is on PATH):
-  `$env:PY = hermes pm environment documents --extra documents --extra documents-pdf`.
-  Never `pip install` into the interpreter that runs Hermes or into the
-  `hermes pm environment` one; Hermes owns both.
+  `$env:PY = huntington pm environment documents --extra documents --extra documents-pdf`.
+  Never `pip install` into the interpreter that runs Huntington or into the
+  `huntington pm environment` one; Huntington owns both.
 - Optional: LibreOffice (`soffice`) for PDF export, Excel recalculation, and
   slide rendering, plus poppler (`pdftoppm` or `pdftocairo`) for slide PNGs.
   The helpers that need them report what is missing and exit 0.

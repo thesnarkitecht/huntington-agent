@@ -46,7 +46,7 @@ def _diverged_managed_checkout(tmp_path: Path) -> tuple[Path, str]:
     upstream.mkdir()
     _git(upstream, "init", "-q", "-b", "main")
     _commit(upstream, "shared.txt")
-    managed = tmp_path / "hermes-agent"
+    managed = tmp_path / "huntington-agent"
     _git(tmp_path, "clone", "-q", str(upstream), str(managed))
     local_sha = _commit(managed, "local-fix.txt")
     _commit(upstream, "upstream-only.txt")

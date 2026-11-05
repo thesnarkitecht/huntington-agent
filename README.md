@@ -61,12 +61,35 @@ so `huntington update` can pull. Use a fine-grained, read-only token for this on
 | Image generation | OpenAI (API key, or ChatGPT sign-in) | Local image generation |
 | Text-to-speech | Microsoft Edge TTS (default), Piper (local) | Qwen TTS |
 | Messaging | Microsoft Teams, email, A2A | |
+| Microsoft 365 | Outlook mail and calendar, OneDrive, SharePoint, Excel, Teams, Planner (MCP server, see below) | |
+| Language | English | |
+
+**Company defaults for new installs** (`hermes_cli/huntington.py`):
+- Web search starts off, and so do Computer Use desktop control, hosted connectors, video
+  analysis, kanban and video generation. Turn any of them on with `huntington tools`.
+- No free Nous Portal identity is ever set up.
+- Telemetry is off.
+- Plugins come only from the curated `plugin-catalog/` in this repository; upstream's live
+  catalog isn't fetched.
 
 Removed from upstream: the Electron desktop app and its browser-hosted Webapp, the Ink TUI,
 Docker and Nix installs, upstream's release publishing, and every other messaging platform
 (Telegram, Discord, Slack, WhatsApp, Signal, Yuanbao and the rest). The full list is in
 [`huntington/removed-paths.txt`](huntington/removed-paths.txt). The provider, backend and tool
 choices live in [`hermes_cli/huntington.py`](hermes_cli/huntington.py).
+
+## Microsoft 365
+
+```bash
+huntington mcp install microsoft-365
+```
+
+This installs the Microsoft Graph MCP server (`@softeria/ms-365-mcp-server`, pinned) in
+work-account mode. Sign in once with the device-code flow: ask the agent to run its `login` tool,
+or run `npx -y @softeria/ms-365-mcp-server@0.170.2 --org-mode --login`. Then start a new session.
+The server uses Softeria's multi-tenant Azure app by default. To keep consent inside the Huntington
+tenant, an admin registers an app and sets `MS365_MCP_CLIENT_ID` and `MS365_MCP_TENANT_ID`. The
+morning-briefing automation and the email skills use it once it's connected.
 
 ## Staying current with upstream
 
@@ -90,6 +113,16 @@ upstream test of that kind, add its node id there. The fork's own contract is
 ```bash
 scripts/run_tests.sh tests/hermes_cli tests/tools
 ```
+
+On GitHub, `.github/workflows/huntington-upstream-sync.yml` does this every Monday:
+- If the merge is clean, it opens a draft PR with the policy tests already run, and dispatches
+  the full CI on it.
+- If a file needs a hand resolution, it opens an issue listing the files.
+
+`.github/workflows/huntington-ci.yml` runs on every PR and push to `main`:
+- the rebrand check, the removed-paths check, lint and the code-health ratchet
+- the policy contract
+- the full suite, in four parallel slices
 
 [`huntington/TRIM-ANALYSIS.md`](huntington/TRIM-ANALYSIS.md) covers what else could be trimmed
 from the engine.

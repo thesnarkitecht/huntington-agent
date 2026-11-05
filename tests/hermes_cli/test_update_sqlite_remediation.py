@@ -27,13 +27,13 @@ def test_selected_sqlite_controls_completion_and_action_receipt(tmp_path, monkey
     assert (message in output) is (verdict != 'unsafe')
     assert ('=== hermes-update completed' in output) is (verdict != 'unsafe' and action_id != 'invalid')
     if verdict == 'unsafe':
-        for text in ('SQLite (3.46.1)', 'corruption bug', 'run the installer again', 'hermes doctor'):
+        for text in ('SQLite (3.46.1)', 'corruption bug', 'run the installer again', 'huntington doctor'):
             assert text in output
     elif action_id != 'invalid':
         assert f'=== hermes-update completed {action_id} ===' in output
 
 
-@pytest.mark.parametrize('already_restarted_units', [None, {'hermes-serve'}])
+@pytest.mark.parametrize('already_restarted_units', [None, {'huntington-serve'}])
 def test_dashboard_refresh_preserves_restart_bookkeeping(already_restarted_units, monkeypatch, capsys):
     calls = []
     monkeypatch.setattr(update_cmd, '_m', lambda: SimpleNamespace(

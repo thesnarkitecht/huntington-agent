@@ -82,7 +82,7 @@ def fleet(tmp_path, monkeypatch):
 
     from gateway import status
     # The default gateway the fixture "starts" is this process; the served probe verifies identity.
-    monkeypatch.setattr(status, "_read_process_cmdline", lambda pid: "hermes gateway run")
+    monkeypatch.setattr(status, "_read_process_cmdline", lambda pid: "huntington gateway run")
     monkeypatch.setattr(gm, "_installed_services", lambda home: _units(state.services.get(_name(home))))
     monkeypatch.setattr(gm, "_live_gateway_pid", lambda home: state.pids.get(_name(home)))
     monkeypatch.setattr(gm, "_service_op", _service_op)
@@ -438,7 +438,7 @@ def test_update_hook_never_touches_single_profile_or_already_multiplexed(fleet, 
 def test_update_hook_reads_a_masked_default_unit_as_an_opt_out(fleet, capsys, monkeypatch, tmp_path):
     """`systemctl mask hermes-gateway` is the operator's "never start this": no refusal, no change (#139324)."""
     from hermes_cli import gateway as gw
-    unit = tmp_path / "systemd/user/hermes-gateway.service"
+    unit = tmp_path / "systemd/user/huntington-gateway.service"
     unit.parent.mkdir(parents=True)
     unit.symlink_to(os.devnull)  # exactly what `systemctl --user mask` leaves on disk
     monkeypatch.setattr(gw, "get_systemd_unit_path", lambda system=False: unit if not system else tmp_path / "none")

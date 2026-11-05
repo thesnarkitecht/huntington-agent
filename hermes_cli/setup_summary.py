@@ -204,9 +204,8 @@ def _print_setup_summary(config: dict, hermes_home):
     except Exception:
         print()
         _setup.print_warning("No inference provider is configured — Huntington cannot chat yet.")
-        _setup._info("  Finish this one step with either of:",
-              "    huntington model            (pick any provider/model)",
-              "    huntington setup --portal   (HIP Portal OAuth, no API key)")
+        _setup._info("  Finish this one step:",
+              "    huntington model            (pick a provider and model)")
 
     print()
     _setup.print_header("Tool Availability Summary")

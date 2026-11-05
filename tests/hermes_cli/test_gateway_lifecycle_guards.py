@@ -51,7 +51,7 @@ def test_scratch_home_does_not_resolve_the_accounts_bare_gateway_unit(tmp_path, 
     pinning the account home. The scratch home must not name that unit."""
     account, scratch = tmp_path / "account", tmp_path / "scratch"
     (scratch / ".huntington").mkdir(parents=True)
-    real_unit = account / ".config" / "systemd" / "user" / "hermes-gateway.service"
+    real_unit = account / ".config" / "systemd" / "user" / "huntington-gateway.service"
     _unit(real_unit, account / ".huntington")
     monkeypatch.delenv("HERMES_HOME", raising=False)
     monkeypatch.delenv("XDG_CONFIG_HOME", raising=False)
@@ -60,7 +60,7 @@ def test_scratch_home_does_not_resolve_the_accounts_bare_gateway_unit(tmp_path, 
     monkeypatch.setattr(os, "geteuid", lambda: 1000)
 
     assert gw.get_hermes_home() == scratch / ".huntington"
-    assert gw.get_service_name() != "hermes-gateway"
+    assert gw.get_service_name() != "huntington-gateway"
     assert gw.get_systemd_unit_path() != real_unit
     assert not gw.get_systemd_unit_path().exists()
 
@@ -78,7 +78,7 @@ def test_lifecycle_verb_refuses_a_user_unit_pinning_another_home(tmp_path, monke
     monkeypatch.setenv("XDG_CONFIG_HOME", str(account / ".config"))
     monkeypatch.setattr(os, "geteuid", lambda: 1000)
     unit = gw.get_systemd_unit_path()
-    assert unit.name == "hermes-gateway-coder.service"
+    assert unit.name == "huntington-gateway-coder.service"
     _unit(unit, account / ".huntington" / "profiles" / "coder")
 
     if verb == "uninstall":
@@ -129,7 +129,7 @@ def test_stop_refuses_while_sessions_are_live_and_names_them(monkeypatch, record
     assert "2 live session(s)" in out
     assert "chat turn agent:main:telegram:dm:7" in out
     assert "background delegation deleg_ab12cd34" in out
-    assert "hermes gateway stop --yes" in out
+    assert "huntington gateway stop --yes" in out
 
     gw._cmd_stop(SimpleNamespace(all=False, system=False, interrupt=True))
     assert stopped == [False]
@@ -201,7 +201,7 @@ def test_sudo_system_stop_checks_the_units_home_not_roots(tmp_path, monkeypatch,
     root_home, user_home = tmp_path / "root", tmp_path / "user" / ".huntington"
     (root_home / ".huntington").mkdir(parents=True)
     user_home.mkdir(parents=True)
-    _unit(tmp_path / "systemd" / "hermes-gateway.service", user_home)
+    _unit(tmp_path / "systemd" / "huntington-gateway.service", user_home)
     monkeypatch.setattr(gw, "_SYSTEM_UNIT_DIR", tmp_path / "systemd")
     monkeypatch.setattr(os, "geteuid", lambda: 0)
     monkeypatch.delenv("SUDO_USER", raising=False)

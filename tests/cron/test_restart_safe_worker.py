@@ -724,7 +724,7 @@ def test_pin_restores_the_committed_generation_site_packages(tmp_path):
     import cron.scheduler_worker_env as worker_env_mod
     import pm.environments
 
-    repo_root = tmp_path / "hermes-agent"
+    repo_root = tmp_path / "huntington-agent"
     repo_root.mkdir()
     venv = _commit_generation(repo_root, "gen1", with_site_packages=True)
     selected = pm.environments.site_packages(venv)

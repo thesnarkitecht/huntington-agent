@@ -632,7 +632,7 @@ def test_a_takeover_debt_another_profile_cannot_see_is_never_silent(tmp_path, mo
         lock_dir.chmod(0o700)
 
     assert (homes["coder"] / "fleet_restart_pending").is_file()
-    assert "hermes gateway restart" in capsys.readouterr().err
+    assert "huntington gateway restart" in capsys.readouterr().err
 
 
 def test_a_historical_updater_arms_the_host_record_under_the_current_mutex(tmp_path, monkeypatch):

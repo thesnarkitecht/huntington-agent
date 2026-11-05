@@ -69,9 +69,9 @@ def test_basetemp_outside_the_native_home_is_left_alone(tmp_path, monkeypatch):
 def test_fallback_root_escapes_a_repo_checked_out_inside_the_native_home(tmp_path, monkeypatch):
     # Default install: repo at ~/.hermes/hermes-agent and TEMP under the home (Windows).
     native = tmp_path / "native-home"
-    (native / "hermes-agent").mkdir(parents=True)
+    (native / "huntington-agent").mkdir(parents=True)
     monkeypatch.setattr(hermes_constants, "_get_platform_default_hermes_home", lambda: native)
-    monkeypatch.setattr(suite_conftest, "PROJECT_ROOT", native / "hermes-agent")
+    monkeypatch.setattr(suite_conftest, "PROJECT_ROOT", native / "huntington-agent")
     monkeypatch.setattr(suite_conftest.tempfile, "gettempdir", lambda: str(native / "tmp"))
     monkeypatch.delenv("PYTEST_DEBUG_TEMPROOT", raising=False)
     config = _config_with_basetemp(None)

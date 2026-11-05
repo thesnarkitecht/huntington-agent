@@ -12,7 +12,7 @@ from hermes_constants import get_default_hermes_root
 def test_store_resolution_follows_relocated_payload(tmp_path, monkeypatch):
     monkeypatch.delenv("HERMES_RUNTIME_DIR", raising=False)
     payload = tmp_path / "agent-payload"
-    repo = payload / "hermes-agent"
+    repo = payload / "huntington-agent"
     repo.mkdir(parents=True)
     stamp = repo / "install-stamp.json"
     stamp.write_text(json.dumps({"payload": "bundled", "runtime": {
@@ -31,7 +31,7 @@ def test_store_resolution_follows_relocated_payload(tmp_path, monkeypatch):
     for destination in (payload, tmp_path / "relocated payload"):
         if destination != payload:
             payload.rename(destination)
-        repo = destination / "hermes-agent"
+        repo = destination / "huntington-agent"
         resolved = store_root(repo)
         assert resolved == destination / "tools"
         installed = json.loads((resolved / "facts.json").read_text())
@@ -52,7 +52,7 @@ def test_store_resolution_follows_relocated_payload(tmp_path, monkeypatch):
 def test_payload_store_cannot_escape_payload(tmp_path, monkeypatch, escape):
     monkeypatch.delenv("HERMES_RUNTIME_DIR", raising=False)
     payload = tmp_path / "agent-payload"
-    repo = payload / "hermes-agent"
+    repo = payload / "huntington-agent"
     repo.mkdir(parents=True)
     outside = tmp_path / "outside"
     outside.mkdir()

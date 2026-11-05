@@ -23,7 +23,7 @@ class TestGatewayPidState:
 
         payload = json.loads((tmp_path / "gateway.pid").read_text())
         assert payload["pid"] == os.getpid()
-        assert payload["kind"] == "hermes-gateway"
+        assert payload["kind"] == "huntington-gateway"
         assert isinstance(payload["argv"], list)
         assert payload["argv"]
 
@@ -73,7 +73,7 @@ class TestGatewayPidState:
         def _write_record(pid: int, start_time: int) -> None:
             record = {
                 "pid": pid,
-                "kind": "hermes-gateway",
+                "kind": "huntington-gateway",
                 "argv": ["python", "-m", "hermes_cli.main", "gateway"],
                 "start_time": start_time,
             }
@@ -106,7 +106,7 @@ class TestGatewayPidState:
         pid_path = tmp_path / "gateway.pid"
         pid_path.write_text(json.dumps({
             "pid": 99999,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "argv": ["python", "-m", "hermes_cli.main", "gateway"],
             "start_time": 123,
         }))
@@ -118,7 +118,7 @@ class TestGatewayPidState:
             "_build_pid_record",
             lambda: {
                 "pid": os.getpid(),
-                "kind": "hermes-gateway",
+                "kind": "huntington-gateway",
                 "argv": ["python", "-m", "hermes_cli.main", "gateway"],
                 "start_time": 123,
             },
@@ -179,7 +179,7 @@ class TestGatewayPidState:
         gateway's gateway.pid/gateway.lock (#125610, #123109)."""
         monkeypatch.setenv("HERMES_HOME", str(tmp_path))
         record = {
-            "pid": 4242, "kind": "hermes-gateway", "start_time": 123,
+            "pid": 4242, "kind": "huntington-gateway", "start_time": 123,
             "argv": ["python", "-m", "hermes_cli.main", "gateway", "run"],
             "hermes_home": str(tmp_path.resolve()),
         }
@@ -203,7 +203,7 @@ class TestGatewayPidState:
         on refusal (#89315); the HELD gateway.lock is the holder's and stays (#125610)."""
         monkeypatch.setenv("HERMES_HOME", str(tmp_path))
         record = {
-            "pid": 4242, "kind": "hermes-gateway", "start_time": 123,
+            "pid": 4242, "kind": "huntington-gateway", "start_time": 123,
             "argv": ["python", "-m", "hermes_cli.main", "gateway", "run"],
             "hermes_home": str((tmp_path / "other-home").resolve()),
         }
@@ -233,7 +233,7 @@ class TestScopedGatewayPidQuery:
         profile_dir.mkdir(parents=True)
         record = {
             "pid": 4242,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "argv": ["python", "-m", "hermes_cli.main", "gateway", "--profile", "wiki"],
             "start_time": 123,
             "hermes_home": str(profile_dir.resolve()),
@@ -361,7 +361,7 @@ class TestGatewayRuntimeStatus:
         state_path.write_text(json.dumps({
             "pid": 99999,
             "start_time": 1000.0,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "platforms": {},
             "updated_at": "2025-01-01T00:00:00Z",
         }))
@@ -387,7 +387,7 @@ class TestGatewayRuntimeStatus:
         payload = {
             "pid": 139,
             "gateway_state": "running",
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "argv": ["hermes", "gateway", "run"],
         }
         coder_home = Path("/opt/data/profiles/coder")
@@ -396,7 +396,7 @@ class TestGatewayRuntimeStatus:
         monkeypatch.setattr(status, "_get_process_start_time", lambda pid: None)
         # PID 139 is now the live DEFAULT gateway (bare, no -p coder).
         monkeypatch.setattr(
-            status, "_read_process_cmdline", lambda pid: "hermes gateway run --replace"
+            status, "_read_process_cmdline", lambda pid: "huntington gateway run --replace"
         )
 
         assert (
@@ -410,7 +410,7 @@ class TestGatewayRuntimeStatus:
         payload = {
             "pid": 139,
             "gateway_state": "running",
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "argv": ["hermes", "gateway", "run"],
             "start_time": 1000,
         }
@@ -419,7 +419,7 @@ class TestGatewayRuntimeStatus:
         monkeypatch.setattr(status, "_pid_exists", lambda pid: True)
         monkeypatch.setattr(status, "_get_process_start_time", lambda pid: 1000)
         for cmdline in (
-            "hermes -p coder gateway run --replace",
+            "huntington -p coder gateway run --replace",
             "/opt/hermes/.venv/bin/hermes --profile coder gateway run --replace",
             "hermes_home=/opt/data/profiles/coder huntington gateway run --replace",
         ):
@@ -436,11 +436,11 @@ class TestGatewayRuntimeStatus:
         (#100817), while a foreign ``-p coder`` keeps being rejected."""
         default_home = Path("/opt/hermes-data")
         for cmdline in (
-            "hermes --profile default gateway run --replace --external-supervisor",
+            "huntington --profile default gateway run --replace --external-supervisor",
             "/opt/hermes/.venv/bin/hermes -p default gateway run",
         ):
             assert status._command_line_belongs_to_profile(cmdline, default_home) is True, cmdline
-        assert status._command_line_belongs_to_profile("hermes -p coder gateway run", default_home) is False
+        assert status._command_line_belongs_to_profile("huntington -p coder gateway run", default_home) is False
 
     def test_command_line_belongs_to_profile_normalizes_separators(self):
         """A Windows argv renders HERMES_HOME with backslashes while the
@@ -465,7 +465,7 @@ class TestGatewayRuntimeStatus:
         default_home = Path("/opt/hermes-data")
         assert not status._command_line_belongs_to_profile("HERMES_HOME=/opt/hermes-data2 huntington gateway run", default_home)
         assert status._command_line_belongs_to_profile("HERMES_HOME=/opt/hermes-data huntington gateway run", default_home)
-        assert status._command_line_belongs_to_profile("hermes gateway run", default_home)
+        assert status._command_line_belongs_to_profile("huntington gateway run", default_home)
 
     def test_command_line_belongs_to_profile_matches_own_home_spellings_only(self):
         """Token-bounded value AND name: quoted values (ps/wmic re-quoting) and a trailing separator
@@ -811,7 +811,7 @@ class TestScopedLocks:
         lock_path.write_text(json.dumps({
             "pid": 99999,
             "start_time": 123,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
         }))
 
         # Post-#21561 the liveness probe routes through
@@ -838,7 +838,7 @@ class TestScopedLocks:
         lock_path.write_text(json.dumps({
             "pid": 873,
             "start_time": None,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "argv": ["/Users/user/.huntington/hermes-agent/hermes_cli/main.py", "gateway", "run", "--replace"],
         }))
 
@@ -875,7 +875,7 @@ class TestScopedLocks:
         lock_path.write_text(json.dumps({
             "pid": os.getpid(),
             "start_time": None,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "argv": ["hermes_cli/main.py", "--profile", "milena", "gateway", "run", "--replace"],
             "scope": "discord-bot-token",
         }))
@@ -907,7 +907,7 @@ class TestScopedLocks:
         lock_path.write_text(json.dumps({
             "pid": os.getpid(),
             "start_time": None,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
         }))
         monkeypatch.setattr(status, "_get_process_start_time", lambda pid: 987654321)
 
@@ -930,7 +930,7 @@ class TestScopedLocks:
         lock_path.write_text(json.dumps({
             "pid": os.getpid(),
             "start_time": 111,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "argv": ["hermes_cli/main.py", "gateway", "run", "--replace"],
             "scope": "discord-bot-token",
         }))
@@ -958,7 +958,7 @@ class TestScopedLocks:
         stale_record = {
             "pid": 99999,
             "start_time": 123,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
         }
         lock_path.write_text(json.dumps(stale_record))
         monkeypatch.setattr(status, "_pid_exists", lambda pid: False)
@@ -966,7 +966,7 @@ class TestScopedLocks:
         winner_record = {
             "pid": 424242,
             "start_time": 456,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "scope": "telegram-bot-token",
         }
         real_replace = os.replace
@@ -997,7 +997,7 @@ class TestScopedLocks:
         lock_path.write_text(json.dumps({
             "pid": 99999,
             "start_time": 123,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
         }))
 
         # Post-#21561: simulate "PID gone" via _pid_exists returning False.
@@ -1021,12 +1021,12 @@ class TestScopedLocks:
         target_lock.write_text(json.dumps({
             "pid": 111,
             "start_time": 222,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
         }))
         other_lock.write_text(json.dumps({
             "pid": 999,
             "start_time": 333,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
         }))
 
         removed = release_all_scoped_locks(
@@ -1248,7 +1248,7 @@ class TestScopedLockTakeover:
         target_home.mkdir(parents=True, exist_ok=True)
         record = {
             "pid": pid,
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "argv": ["python", "-m", "hermes_cli.main", "gateway", "run"],
             "start_time": start_time,
             "hermes_home": str(target_home),
@@ -1771,7 +1771,7 @@ def test_strict_gateway_identity_raises_on_malformed_active_metadata(
 def test_strict_gateway_identity_rejects_reused_pid(tmp_path, monkeypatch):
     pid_path = tmp_path / "gateway.pid"
     lock_path = tmp_path / "gateway.lock"
-    record = {"pid": 123, "start_time": 10.0, "kind": "hermes-gateway"}
+    record = {"pid": 123, "start_time": 10.0, "kind": "huntington-gateway"}
     pid_path.write_text(json.dumps(record), encoding="utf-8")
     lock_path.write_text(json.dumps(record), encoding="utf-8")
     monkeypatch.setattr(status, "_get_gateway_lock_path", lambda _path=None: lock_path)
@@ -1789,7 +1789,7 @@ def test_strict_gateway_identity_adopts_held_lock_when_pid_file_is_gone(tmp_path
     gateway.pid, and raising there aborted every following `hermes update` (#123430)."""
     pid_path = tmp_path / "gateway.pid"
     lock_path = tmp_path / "gateway.lock"
-    record = {"pid": 123, "start_time": 10.0, "kind": "hermes-gateway",
+    record = {"pid": 123, "start_time": 10.0, "kind": "huntington-gateway",
               "argv": ["python", "-m", "hermes_cli.main", "gateway", "run", "--replace"]}
     lock_path.write_text(json.dumps(record), encoding="utf-8")
     monkeypatch.setattr(status, "_get_gateway_lock_path", lambda _path=None: lock_path)

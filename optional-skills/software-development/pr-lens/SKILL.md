@@ -2,7 +2,7 @@
 name: pr-lens
 description: "Draw code changes as animated architecture/data-flow SVGs."
 version: 1.0.0
-author: Coldtea AI (adapted by Nous Research)
+author: Coldtea AI (adapted by HIP)
 license: MIT
 platforms: [linux, macos]
 metadata:
@@ -131,7 +131,7 @@ Validator failure codes:
 Smoke test (live-verified 2026-09-12 with `@coldtea/pr-lens-cli` via npx, node on Linux):
 
 ```bash
-cp references/example.graph.json ~/.hermes/cache/scratch/prlens-smoke/ && cd ~/.hermes/cache/scratch/prlens-smoke
+cp references/example.graph.json ~/.huntington/cache/scratch/prlens-smoke/ && cd ~/.huntington/cache/scratch/prlens-smoke
 npx -y @coldtea/pr-lens-cli@latest validate example.graph.json
 # ✓ example.graph.json — graph document · 3 lanes, 10 nodes, 13 edges, 1 flow · 6 walkthrough steps
 npx -y @coldtea/pr-lens-cli@latest render example.graph.json --theme light

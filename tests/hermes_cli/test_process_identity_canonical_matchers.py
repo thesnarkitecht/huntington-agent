@@ -25,8 +25,8 @@ CMDLINES = [
     ("huntington -m serve kanban --preserve-cache " + LOOPBACK, "kanban", False, False),
     ("python -m hermes_cli.main kanban --preserve-cache " + LOOPBACK, "kanban", False, False),
     ("huntington --reasoning high dashboard " + LOOPBACK, "dashboard", False, False),
-    ("hermes gateway run --replace", "gateway", False, False),
-    ("hermes chat --model serve", "chat", False, False),
+    ("huntington gateway run --replace", "gateway", False, False),
+    ("huntington chat --model serve", "chat", False, False),
     ("python observer.py serve " + LOOPBACK, None, False, False),
 ]
 
@@ -42,9 +42,9 @@ def test_kill_and_relaunch_predicates_agree_with_the_canonical_holder_matcher(
 
 
 def test_desktop_local_serve_spares_fixed_port_and_remote_hosts():
-    assert not _is_desktop_local_serve_cmdline("hermes serve --host 100.106.105.2 --port 9119 --skip-build")
-    assert not _is_desktop_local_serve_cmdline("hermes serve --host 127.0.0.1 --port 9119")
-    assert _is_desktop_local_serve_cmdline("hermes serve --host localhost --port 0")
+    assert not _is_desktop_local_serve_cmdline("huntington serve --host 100.106.105.2 --port 9119 --skip-build")
+    assert not _is_desktop_local_serve_cmdline("huntington serve --host 127.0.0.1 --port 9119")
+    assert _is_desktop_local_serve_cmdline("huntington serve --host localhost --port 0")
 
 
 def test_profile_liveness_is_the_shared_ladder(tmp_path, monkeypatch):

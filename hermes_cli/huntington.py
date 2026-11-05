@@ -131,3 +131,40 @@ def apply_default_skin(skins: dict) -> None:
 
 
 BANNER_LOGO_WIDTH = 135
+
+
+# Plugin catalog: only the curated in-tree list (plugin-catalog/), never upstream's live catalog.
+LIVE_PLUGIN_CATALOG = False
+
+
+# Company defaults for new installs (`huntington tools` can still switch any of these on):
+# web search is opt-in, and desktop control, Nous-hosted connectors, video analysis and the
+# removed Discord platform's tools start off.
+DEFAULT_OFF_TOOLSETS: frozenset[str] = frozenset({
+    "web", "computer_use", "connections", "video", "discord", "discord_admin",
+})
+
+# Config defaults this build changes (deep-merged into upstream's DEFAULT_CONFIG at import).
+CONFIG_DEFAULT_OVERRIDES: dict = {
+    # Never provision a free Nous Portal identity or send inference there.
+    "nous": {"guest": False},
+    # Telemetry stays off and points nowhere upstream.
+    "telemetry": {"shared_metrics": {"enabled": False, "send": False}},
+}
+
+
+def apply_config_defaults(defaults: dict) -> None:
+    """Deep-merge CONFIG_DEFAULT_OVERRIDES into upstream's DEFAULT_CONFIG (called by config_defaults)."""
+    def merge(into: dict, update: dict) -> None:
+        for key, value in update.items():
+            if isinstance(value, dict) and isinstance(into.get(key), dict):
+                merge(into[key], value)
+            else:
+                into[key] = value
+    merge(defaults, CONFIG_DEFAULT_OVERRIDES)
+
+
+# The Nous Portal (upstream's hosted subscription) is not a supported provider: `setup --portal`
+# and `huntington portal` refuse with this instead of signing in.
+PORTAL_UNAVAILABLE = ("The hosted portal is not available in HUNTINGTON-AGENT. "
+                      "Pick a supported provider with `huntington model`.")

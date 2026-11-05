@@ -100,7 +100,7 @@ def test_a_refused_replacement_is_reported_with_its_reason(home, monkeypatch):
 
 def _owner_payload(home: Path, pid: int, start_time):
     # MAIN's identify: no runtime_protocol, kind/pid/start_time/hermes_home from its pid record.
-    return {"protocol": 1, "kind": "hermes-gateway", "pid": pid, "start_time": start_time,
+    return {"protocol": 1, "kind": "huntington-gateway", "pid": pid, "start_time": start_time,
             "hermes_home": str(home), "supervisor": "manual"}
 
 

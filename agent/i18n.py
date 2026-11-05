@@ -30,10 +30,7 @@ logger = logging.getLogger(__name__)
 
 # Bundled catalogs (compat: tests and the parity check iterate this). ``supported_languages()`` is the
 # live set including overlay and pack languages.
-SUPPORTED_LANGUAGES: tuple[str, ...] = (
-    "en", "zh", "zh-hant", "ja", "de", "es", "fr", "tr", "uk",
-    "af", "ko", "it", "ga", "pt", "ru", "hu", "ar",
-)
+SUPPORTED_LANGUAGES: tuple[str, ...] = ("en",)  # HUNTINGTON-AGENT ships English only
 DEFAULT_LANGUAGE = "en"
 
 # Natural aliases so "chinese" / "zh-CN" / "jp" hit the right catalog instead of

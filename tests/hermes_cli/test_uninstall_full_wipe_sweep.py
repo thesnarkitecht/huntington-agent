@@ -69,7 +69,7 @@ def test_remove_dashboard_launchd_jobs_skips_malformed_plists(monkeypatch, tmp_p
 @pytest.mark.skipif(sys.platform != "darwin", reason="macOS-only sweep")
 def test_full_uninstall_sweeps_macos_caches_and_dashboard_launchd(monkeypatch, tmp_path):
     """The full-wipe step must reach the caches + launchd sweep, keep-data must not."""
-    project_root = tmp_path / "hermes-agent"
+    project_root = tmp_path / "huntington-agent"
     hermes_home = tmp_path / ".huntington"
     project_root.mkdir()
     # A .git dir marks the tree as a removable git checkout — without it the

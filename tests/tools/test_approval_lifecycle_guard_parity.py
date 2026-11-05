@@ -7,14 +7,14 @@ from tools.approval import detect_dangerous_command
 # does not stop a live job on its own, but it is what makes an unload survive
 # a reboot, so it belongs to the same family.
 GATEWAY_LIFECYCLE_LAUNCHCTL = (
-    "launchctl kickstart -k gui/501/ai.hermes.gateway",
-    "launchctl unload ~/Library/LaunchAgents/ai.hermes.gateway.plist",
-    "launchctl load ~/Library/LaunchAgents/ai.hermes.gateway.plist",
-    "launchctl stop ai.hermes.gateway",
-    "launchctl restart ai.hermes.gateway",
-    "launchctl bootout gui/501/ai.hermes.gateway",
-    "launchctl remove ai.hermes.gateway",
-    "launchctl disable gui/501/ai.hermes.gateway",
+    "launchctl kickstart -k gui/501/ai.huntington.gateway",
+    "launchctl unload ~/Library/LaunchAgents/ai.huntington.gateway.plist",
+    "launchctl load ~/Library/LaunchAgents/ai.huntington.gateway.plist",
+    "launchctl stop ai.huntington.gateway",
+    "launchctl restart ai.huntington.gateway",
+    "launchctl bootout gui/501/ai.huntington.gateway",
+    "launchctl remove ai.huntington.gateway",
+    "launchctl disable gui/501/ai.huntington.gateway",
 )
 
 
@@ -66,7 +66,7 @@ class TestLifecycleGuardLaunchctlParity:
 
         for cmd in (
             "launchctl bootout gui/501/com.example.unrelated",
-            "launchctl remove ai.hermes.update-checker",
+            "launchctl remove ai.huntington.update-checker",
             "launchctl disable gui/501/com.apple.WindowServer",
             "launchctl print system/com.apple.WindowServer",
         ):

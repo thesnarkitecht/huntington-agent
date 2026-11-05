@@ -167,8 +167,9 @@ def remove_wrapper_script():
     wrapper_paths = [
         Path.home() / ".local" / "bin" / "hermes",
         Path.home() / ".local" / "bin" / "hermes-acp",
-        Path.home() / ".local" / "bin" / "hermes-agent",
+        Path.home() / ".local" / "bin" / "huntington-agent",
         Path.home() / ".local" / "bin" / "huntington",
+        Path.home() / ".local" / "bin" / "huntington-acp",
         Path("/usr/local/bin/hermes"),
         Path("/usr/local/bin/hermes-acp"),
         Path("/usr/local/bin/hermes-agent"),
@@ -300,7 +301,7 @@ def _remove_systemd_gateway() -> bool:
 # installed. An uninstall must sweep BOTH — a stale agent keeps respawning the
 # gateway after the code tree is gone (#62209).
 _LAUNCHD_GATEWAY_PLIST_PATTERNS = (
-    "ai.hermes.gateway*.plist",
+    "ai.huntington.gateway*.plist",
     "io.nousresearch.hermes-agent.gateway*.plist",
 )
 
@@ -730,7 +731,7 @@ def run_gui_uninstall(args):
         print(color("Kept intact:", Colors.GREEN, Colors.BOLD))
         print(f"  • The Huntington agent at {hermes_home / 'hermes-agent'}")
         print(f"  • Your config, sessions, and secrets under {hermes_home}")
-        if (shared_modules := hermes_home / "hermes-agent" / "node_modules").exists():
+        if (shared_modules := hermes_home / "huntington-agent" / "node_modules").exists():
             print(f"  • Shared workspace dependencies at {shared_modules}")
         print()
 

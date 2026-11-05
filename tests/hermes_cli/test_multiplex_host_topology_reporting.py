@@ -50,7 +50,7 @@ def test_cron_status_names_the_host_gateway_for_a_served_profile(served_host, ca
     assert f"PID {os.getpid()}" in out and "served" in out
     assert "not running" not in out.lower()
     # Never route the user to a SECOND host process: per-profile install is legacy-only remediation.
-    assert "hermes gateway install" not in out
+    assert "huntington gateway install" not in out
     assert "sudo huntington gateway install --system" not in out
 
 
@@ -107,7 +107,7 @@ def test_doctor_checks_host_unit_linger_under_a_served_profile(served_host, tmp_
     config_home = (tmp_path / "xdgconfig") if xdg else (fake_home / ".config")
     unit_dir = config_home / "systemd" / "user"
     unit_dir.mkdir(parents=True)
-    (unit_dir / "hermes-gateway.service").write_text("[Unit]\n")  # the HOST unit; no per-profile unit
+    (unit_dir / "huntington-gateway.service").write_text("[Unit]\n")  # the HOST unit; no per-profile unit
     monkeypatch.setenv("HOME", str(fake_home))
     # A host that moves XDG_CONFIG_HOME keeps its units there; probing ~/.config false-negatives.
     if xdg:

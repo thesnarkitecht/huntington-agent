@@ -43,7 +43,7 @@ def test_install_ps1_lands_on_the_latest_stable_release(tmp_path, side, start, c
     if not powershell:
         pytest.skip("Windows PowerShell is required")
     origin, home = tmp_path / "origin", tmp_path / "home"
-    install = home / "hermes-agent"
+    install = home / "huntington-agent"
     origin.mkdir()
     home.mkdir()
     _git(origin, "init", "-q", "-b", "main")

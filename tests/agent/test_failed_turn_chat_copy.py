@@ -200,7 +200,7 @@ def test_interpreter_shutdown_copy_substitutes_the_real_session_id():
         _outer_error_count=0, api_call_count=1, messages=[], conversation_history=None,
         _turn_exit_reason="unknown", failed=False, final_response=None,
     )
-    assert "hermes --resume 20260914_abc" in verdict.final_response
+    assert "huntington --resume 20260914_abc" in verdict.final_response
     assert "<session-id>" not in verdict.final_response
 
 

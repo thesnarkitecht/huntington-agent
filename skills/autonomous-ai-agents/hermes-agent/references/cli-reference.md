@@ -1,6 +1,6 @@
-# Hermes CLI Reference
+# Huntington CLI Reference
 
-Live sources when anything looks stale: `hermes --help`, `hermes <command> --help`,
+Live sources when anything looks stale: `huntington --help`, `hermes <command> --help`,
 https://hermes-agent.nousresearch.com/docs/reference/cli-commands
 
 ### Global Flags
@@ -27,7 +27,7 @@ hermes [flags] [command]        (no subcommand = interactive chat)
 ### Chat
 
 ```
-hermes chat [flags]
+huntington chat [flags]
   -q, --query TEXT          Single query, non-interactive
   --image PATH              Attach a local image to a single query
   -Q, --quiet               Suppress banner, spinner, tool previews
@@ -40,112 +40,112 @@ hermes chat [flags]
 ### Configuration
 
 ```
-hermes setup [section]      Wizard (model|tts|terminal|gateway|tools|agent)
-hermes model                Interactive model/provider picker
-hermes fallback [add|remove|list]  Fallback provider chain
-hermes config [show|edit|get|set|unset|path|env-path|check|migrate]
-hermes login / logout       OAuth sign-in / clear stored auth
-hermes doctor [--fix]       Check dependencies and config
-hermes status [--full]      Component summary (--full: every section)
+huntington setup [section]      Wizard (model|tts|terminal|gateway|tools|agent)
+huntington model                Interactive model/provider picker
+huntington fallback [add|remove|list]  Fallback provider chain
+huntington config [show|edit|get|set|unset|path|env-path|check|migrate]
+huntington login / logout       OAuth sign-in / clear stored auth
+huntington doctor [--fix]       Check dependencies and config
+huntington status [--full]      Component summary (--full: every section)
 ```
 
 ### Tools & Skills
 
 ```
-hermes tools [list|enable NAME|disable NAME]   Per-platform toolsets (curses UI with no args)
+huntington tools [list|enable NAME|disable NAME]   Per-platform toolsets (curses UI with no args)
 
-hermes skills list|browse|search QUERY|inspect ID
-hermes skills install ID    Hub identifier OR a direct https://…/SKILL.md URL
-hermes skills config        Enable/disable skills per platform
-hermes skills check|update|uninstall|publish PATH
-hermes skills tap add REPO  Add a GitHub repo as a skill source
-hermes bundles              Skill bundles (one /<name> alias loads several skills)
+huntington skills list|browse|search QUERY|inspect ID
+huntington skills install ID    Hub identifier OR a direct https://…/SKILL.md URL
+huntington skills config        Enable/disable skills per platform
+huntington skills check|update|uninstall|publish PATH
+huntington skills tap add REPO  Add a GitHub repo as a skill source
+huntington bundles              Skill bundles (one /<name> alias loads several skills)
 ```
 
 ### MCP Servers
 
 ```
-hermes mcp add NAME (--url or --command) | remove | list | test NAME
-hermes mcp catalog | install NAME     Curated catalog install
-hermes mcp configure NAME             Toggle tool selection
-hermes mcp-serve                      Run Hermes as an MCP server (mcp-serve plugin)
+huntington mcp add NAME (--url or --command) | remove | list | test NAME
+huntington mcp catalog | install NAME     Curated catalog install
+huntington mcp configure NAME             Toggle tool selection
+huntington mcp-serve                      Run Huntington as an MCP server (mcp-serve plugin)
 ```
 Details (transport, tool discovery, catalog): `references/native-mcp.md`.
 
 ### Gateway (Messaging Platforms)
 
 ```
-hermes gateway run|install|start|stop|restart|status|setup
+huntington gateway run|install|start|stop|restart|status|setup
 ```
 
-20+ platforms: Telegram, Discord, Slack, WhatsApp (Baileys + Business Cloud API), iMessage (Photon — `hermes photon setup`), Signal, Email, SMS, Matrix, Mattermost, Teams, LINE, SimpleX, ntfy, Google Chat, Home Assistant, DingTalk, Feishu, WeCom, Weixin, API Server, Webhooks. Open WebUI connects via the API Server adapter. Most adapters ship under `plugins/platforms/`.
+20+ platforms: Telegram, Discord, Slack, WhatsApp (Baileys + Business Cloud API), iMessage (Photon — `huntington photon setup`), Signal, Email, SMS, Matrix, Mattermost, Teams, LINE, SimpleX, ntfy, Google Chat, Home Assistant, DingTalk, Feishu, WeCom, Weixin, API Server, Webhooks. Open WebUI connects via the API Server adapter. Most adapters ship under `plugins/platforms/`.
 Docs: https://hermes-agent.nousresearch.com/docs/user-guide/messaging/
 
 ### Sessions
 
 ```
-hermes sessions list|browse|rename ID TITLE|delete ID|export OUT|prune|stats
+huntington sessions list|browse|rename ID TITLE|delete ID|export OUT|prune|stats
 ```
 
 ### Cron / Webhooks
 
 ```
-hermes cron list|create SCHED|edit ID|pause|resume|run ID|remove|status
+huntington cron list|create SCHED|edit ID|pause|resume|run ID|remove|status
     Schedules: '30m', 'every 2h', '0 9 * * *', ISO timestamp
-hermes webhook subscribe NAME|list|remove NAME|test NAME
+huntington webhook subscribe NAME|list|remove NAME|test NAME
 ```
 Webhook payloads/routes: `references/webhooks.md`.
 
 ### Profiles
 
 ```
-hermes profile list|create NAME (--clone|--clone-all|--clone-from)|use|show|delete
-hermes profile rename A B | alias NAME | export NAME | import FILE
-hermes profile migrate-identity A B   Retry a completed rename's session/routing identity migration
+huntington profile list|create NAME (--clone|--clone-all|--clone-from)|use|show|delete
+huntington profile rename A B | alias NAME | export NAME | import FILE
+huntington profile migrate-identity A B   Retry a completed rename's session/routing identity migration
 ```
 
 ### Credentials & Pools
 
 ```
-hermes auth                 Interactive credential manager
-hermes auth add [PROVIDER]  Add OAuth or API-key credential (nous, openai-codex, qwen-oauth, …)
-hermes auth list|remove P IDX|reset PROVIDER|status
+huntington auth                 Interactive credential manager
+huntington auth add [PROVIDER]  Add OAuth or API-key credential (nous, openai-codex, qwen-oauth, …)
+huntington auth list|remove P IDX|reset PROVIDER|status
 ```
 Multiple credentials per provider form a pool that rotates automatically and skips exhausted keys.
 
 ### Other
 
 ```
-hermes desktop / gui        Native desktop app
-hermes dashboard            Web admin panel + embedded chat (--stop / --status)
-hermes proxy                OpenAI-compatible local proxy backed by an OAuth provider
-hermes portal               Quick setup / sign in via Nous Portal
-hermes kanban <verb>        Multi-agent work-queue board
-hermes project              Named multi-folder workspaces (see references/projects-and-folders.md)
-hermes skin list|use|set    Switch/tweak skins (see references/themes.md)
-hermes pets <verb>          Pet mascots (see references/petdex.md)
-hermes memory setup|status|off|reset   Memory provider
-hermes secrets bitwarden|onepassword   External secret stores
-hermes moa                  Mixture-of-Agents slots
-hermes hooks / security / backup / import / checkpoints / console
-hermes logs [-f] [errors]   View agent/error logs
-hermes send                 One-off message through a gateway platform
-hermes pairing / plugins / insights / journey / computer-use
-hermes acp                  ACP server (IDE integration)
-hermes completion bash|zsh|fish
-hermes update / uninstall
+huntington desktop / gui        Native desktop app
+huntington dashboard            Web admin panel + embedded chat (--stop / --status)
+huntington proxy                OpenAI-compatible local proxy backed by an OAuth provider
+huntington portal               Quick setup / sign in via HIP Portal
+huntington kanban <verb>        Multi-agent work-queue board
+huntington project              Named multi-folder workspaces (see references/projects-and-folders.md)
+huntington skin list|use|set    Switch/tweak skins (see references/themes.md)
+huntington pets <verb>          Pet mascots (see references/petdex.md)
+huntington memory setup|status|off|reset   Memory provider
+huntington secrets bitwarden|onepassword   External secret stores
+huntington moa                  Mixture-of-Agents slots
+huntington hooks / security / backup / import / checkpoints / console
+huntington logs [-f] [errors]   View agent/error logs
+huntington send                 One-off message through a gateway platform
+huntington pairing / plugins / insights / journey / computer-use
+huntington acp                  ACP server (IDE integration)
+huntington completion bash|zsh|fish
+huntington update / uninstall
 ```
 
-Plugin- and provider-supplied subcommands (e.g. `hermes photon setup`) only appear once their plugin is installed/active. Importing from OpenClaw, Claude Code, Codex CLI or Cursor (`hermes import-agent <agent>`, plus the older `hermes claw migrate|cleanup`) comes from the `agent-importers` plugin; a fresh `hermes setup` that finds one of those agents offers to install it.
+Plugin- and provider-supplied subcommands (e.g. `huntington photon setup`) only appear once their plugin is installed/active. Importing from OpenClaw, Claude Code, Codex CLI or Cursor (`huntington import-agent <agent>`, plus the older `huntington claw migrate|cleanup`) comes from the `agent-importers` plugin; a fresh `huntington setup` that finds one of those agents offers to install it.
 
 ### Where to Find Things
 
 | Looking for... | Location |
 |---|---|
-| Config options | `hermes config edit` · [Configuration docs](https://hermes-agent.nousresearch.com/docs/user-guide/configuration) |
-| Tools / toolsets | `hermes tools list` · [Tools reference](https://hermes-agent.nousresearch.com/docs/reference/tools-reference) |
-| Skills catalog | `hermes skills browse` · [Skills catalog](https://hermes-agent.nousresearch.com/docs/reference/skills-catalog) |
-| Provider setup | `hermes model` · [Providers guide](https://hermes-agent.nousresearch.com/docs/integrations/providers) |
-| Env variables | `hermes config env-path` · [Env vars reference](https://hermes-agent.nousresearch.com/docs/reference/environment-variables) |
-| Gateway logs | `~/.hermes/logs/gateway.log` (or `hermes logs`) |
-| Sessions | `hermes sessions browse` (reads state.db) |
+| Config options | `huntington config edit` · [Configuration docs](https://hermes-agent.nousresearch.com/docs/user-guide/configuration) |
+| Tools / toolsets | `huntington tools list` · [Tools reference](https://hermes-agent.nousresearch.com/docs/reference/tools-reference) |
+| Skills catalog | `huntington skills browse` · [Skills catalog](https://hermes-agent.nousresearch.com/docs/reference/skills-catalog) |
+| Provider setup | `huntington model` · [Providers guide](https://hermes-agent.nousresearch.com/docs/integrations/providers) |
+| Env variables | `huntington config env-path` · [Env vars reference](https://hermes-agent.nousresearch.com/docs/reference/environment-variables) |
+| Gateway logs | `~/.huntington/logs/gateway.log` (or `huntington logs`) |
+| Sessions | `huntington sessions browse` (reads state.db) |

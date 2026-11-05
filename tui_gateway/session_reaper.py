@@ -506,7 +506,7 @@ def _start_backend_heartbeat_refresher() -> None:
                 db.clear_backend_heartbeat(_backend_id_for_this_process())
 
     atexit.register(_atexit_clear)
-    threading.Thread(target=_loop, name="hermes-gateway-heartbeat", daemon=True).start()
+    threading.Thread(target=_loop, name="huntington-gateway-heartbeat", daemon=True).start()
 
 
 def _schedule_startup_orphan_sweep() -> None:

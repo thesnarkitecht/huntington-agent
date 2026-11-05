@@ -219,7 +219,7 @@ TOOLSETS = {
     "hermes-wecom-callback": _bundle("WeCom callback toolset - enterprise self-built app messaging (full access)"),
     "hermes-sms": _bundle("SMS bot toolset - interact with Huntington via SMS (Twilio)"),
     "hermes-webhook": _ts("Webhook toolset - receive and process external webhook events", _HERMES_WEBHOOK_SAFE_TOOLS),
-    "hermes-gateway": _ts(
+    "huntington-gateway": _ts(
         "Gateway toolset - union of all messaging platform tools",
         [],
         includes=[

@@ -79,7 +79,7 @@ def _ns(**kw):
 
 
 def _make_desktop_tree(tmp_path: Path) -> Path:
-    root = tmp_path / "hermes-agent"
+    root = tmp_path / "huntington-agent"
     desktop_dir = root / "apps" / "desktop"
     desktop_dir.mkdir(parents=True)
     (desktop_dir / "package.json").write_text("{}", encoding="utf-8")
@@ -275,7 +275,7 @@ def test_site_packages_install_kind_detects_brew_and_pip():
 def test_gui_brew_install_prints_brew_guidance_not_venv_hint(tmp_path, monkeypatch, capsys):
     """A Homebrew install has no apps/desktop tree and can never build one — the
     error must say so instead of implying a broken checkout."""
-    root = tmp_path / "Cellar" / "hermes-agent" / "2026.7.7.2" / "libexec" / "site-packages"
+    root = tmp_path / "Cellar" / "huntington-agent" / "2026.7.7.2" / "libexec" / "site-packages"
     root.mkdir(parents=True)
     monkeypatch.setattr(cli_main, "PROJECT_ROOT", root)
     monkeypatch.setattr(main_desktop, "_launch_installed_macos_desktop_app", lambda: False)
@@ -291,7 +291,7 @@ def test_gui_brew_install_prints_brew_guidance_not_venv_hint(tmp_path, monkeypat
 
 def test_gui_brew_install_launches_installed_app_when_present(tmp_path, monkeypatch):
     """Prefer the separately installed /Applications/Hermes.app over failing."""
-    root = tmp_path / "Cellar" / "hermes-agent" / "2026.7.7.2" / "libexec" / "site-packages"
+    root = tmp_path / "Cellar" / "huntington-agent" / "2026.7.7.2" / "libexec" / "site-packages"
     root.mkdir(parents=True)
     monkeypatch.setattr(cli_main, "PROJECT_ROOT", root)
     launched = []

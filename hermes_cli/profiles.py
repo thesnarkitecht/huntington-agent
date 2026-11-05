@@ -317,10 +317,10 @@ def _find_our_wrapper(alias: str) -> Optional[Path]:
 
 
 def _is_our_wrapper(path: Path) -> bool:
-    """True when *path* reads as a Hermes-generated wrapper (``hermes -p`` in its head)."""
+    """True when *path* reads as a generated wrapper (``huntington -p`` in its head)."""
     try:
         with open(path, encoding="utf-8-sig") as f:
-            return "hermes -p" in f.read(_WRAPPER_READ_LIMIT)
+            return "huntington -p" in f.read(_WRAPPER_READ_LIMIT)
     except Exception:
         return False
 
@@ -557,9 +557,9 @@ def create_wrapper_script(name: str, target: Optional[str] = None) -> Optional[P
     wrapper_path = _wrapper_path(canon)
     try:
         if sys.platform == "win32":
-            wrapper_path.write_text(f"@echo off\r\nhermes -p {profile} %*\r\n", encoding="utf-8")
-        else:
-            hermes_exe = shutil.which("hermes") or "hermes"
+            wrapper_path.write_text(f"@echo off\r\nhuntington -p {profile} %*\r\n", encoding="utf-8")
+        else:  # HUNTINGTON-AGENT: wrappers start `huntington`, the command this build publishes
+            hermes_exe = shutil.which("huntington") or "huntington"
             wrapper_path.write_text(f'#!/bin/sh\nexec {shlex.quote(hermes_exe)} -p {profile} "$@"\n', encoding="utf-8")
             wrapper_path.chmod(wrapper_path.stat().st_mode | stat.S_IEXEC | stat.S_IXGRP | stat.S_IXOTH)
         return wrapper_path
@@ -1499,7 +1499,7 @@ def backfill_profile_envs(quiet: bool = False) -> list[str]:
 
 
 _BACKEND_TOKENS = frozenset({"serve", "dashboard", "gateway"})
-_HERMES_ARGV_MARKERS = ("hermes_cli.main", "hermes-gateway", "tui_gateway")
+_HERMES_ARGV_MARKERS = ("hermes_cli.main", "huntington-gateway", "tui_gateway")
 # python / python3 / python3.12 / pythonw(.exe): the interpreter basenames a
 # `#!/…/python3` console-script shim is exec'd through when something (e.g. Electron's
 # `findOnPath('hermes')`) spawns the shim by handing the interpreter its path — then the

@@ -4050,14 +4050,14 @@ class GatewayRunner(
         unset by default.
         """
         return GatewayRunner._get_or_create_pool(
-            self, "_executor", lambda: _UnboundedThreadExecutor(thread_name_prefix="hermes-gateway"))
+            self, "_executor", lambda: _UnboundedThreadExecutor(thread_name_prefix="huntington-gateway"))
 
     def _get_housekeeping_executor(self) -> concurrent.futures.Executor:
         """Return the gateway-owned executor for best-effort session housekeeping."""
         return GatewayRunner._get_or_create_pool(
             self, "_housekeeping_executor",
             lambda: concurrent.futures.ThreadPoolExecutor(
-                max_workers=_HOUSEKEEPING_MAX_WORKERS, thread_name_prefix="hermes-gateway-hk"))
+                max_workers=_HOUSEKEEPING_MAX_WORKERS, thread_name_prefix="huntington-gateway-hk"))
 
     @staticmethod
     def _stop_pool(executor) -> list:

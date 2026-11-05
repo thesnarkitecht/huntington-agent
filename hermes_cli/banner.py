@@ -151,7 +151,7 @@ def _resolve_repo_dir() -> Optional[Path]:
     """
     repo_dir = Path(__file__).parent.parent.resolve()
     if not (repo_dir / ".git").exists():
-        repo_dir = get_hermes_home() / "hermes-agent"
+        repo_dir = get_hermes_home() / "huntington-agent"
     return repo_dir if (repo_dir / ".git").exists() else None
 
 

@@ -27,7 +27,7 @@ def test_startup_prune_reclaims_only_provably_deleted_checkouts(tmp_path, monkey
     repo = tmp_path / "repo"
     (repo / ".worktrees").mkdir(parents=True)
     subprocess.run(["git", "init", "-q", str(repo)], check=True)
-    live_root = tmp_path / "home" / "hermes-agent"
+    live_root = tmp_path / "home" / "huntington-agent"
     live_root.mkdir(parents=True)
     live = _state(installs, "aaaa", live_root)
     gone_scratch = _state(installs, "bbbb", tmp_path / "home" / "cache" / "scratch" / "clone")
@@ -37,7 +37,7 @@ def test_startup_prune_reclaims_only_provably_deleted_checkouts(tmp_path, monkey
     (unknown / "environments").mkdir(parents=True)
     # A data root shared across a mount boundary records checkouts this process cannot see:
     # a host install from inside a container, a container install from the host.
-    host_install = _state(installs, "eeee", tmp_path / "other-host-home" / ".huntington" / "hermes-agent")
+    host_install = _state(installs, "eeee", tmp_path / "other-host-home" / ".huntington" / "huntington-agent")
     container_install = _state(installs, "ffff", tmp_path / "opt-hermes")
 
     assert orphan_install_states(installs) == [gone_scratch, gone_worktree]

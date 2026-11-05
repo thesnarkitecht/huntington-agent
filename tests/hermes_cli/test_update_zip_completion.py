@@ -430,7 +430,7 @@ def test_installed_app_without_a_checkout_build_is_still_rebuilt(zip_update, mon
     monkeypatch.setattr("hermes_cli.gui_uninstall.packaged_gui_app_paths", lambda: [installed])
     # The checkout under the default Hermes home is the one an installed app runs.
     (tmp_path / "default-home").mkdir()
-    (tmp_path / "default-home" / "hermes-agent").symlink_to(zip_update.root)
+    (tmp_path / "default-home" / "huntington-agent").symlink_to(zip_update.root)
     monkeypatch.setattr("hermes_constants.get_default_hermes_root", lambda **kw: tmp_path / "default-home")
     built = []
     monkeypatch.setattr("hermes_cli.source_build.build_update_products",

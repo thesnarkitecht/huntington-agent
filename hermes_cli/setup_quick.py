@@ -57,6 +57,10 @@ def _run_nous_flow(config: dict, *, context: str, cancel_exc: tuple, cancel_line
 def _run_portal_one_shot(config: dict) -> None:
     """One-shot Nous Portal setup (``hermes setup --portal`` / ``hermes portal``)."""
     from hermes_cli.setup import _info, _print_banner, _record_setup_completed, print_error, print_info, print_success
+    from hermes_cli.huntington import PORTAL_UNAVAILABLE, provider_supported
+    if not provider_supported("nous"):
+        print_error(PORTAL_UNAVAILABLE)
+        return
     _print_banner("│     ☤ Huntington Setup — HIP Portal (one-shot)             │")
     _info(None, "  One subscription, 300+ models, plus the Tool Gateway:",
           "    web search, image generation, TTS, browser automation",

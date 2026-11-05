@@ -74,7 +74,7 @@ def test_plan_reconciliation_live_windows(tmp_path, monkeypatch):
             "pid": child.pid,
             "create_time": create_time,
             "gateway_state": "running",
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "code_sha": "f" * 40,
             "code_version": "0.20.5",
         }), encoding="utf-8")
@@ -127,7 +127,7 @@ def test_plan_reconciliation_live_windows(tmp_path, monkeypatch):
             "pid": foreign.pid,
             "create_time": psutil.Process(foreign.pid).create_time(),
             "gateway_state": "running",
-            "kind": "hermes-gateway",
+            "kind": "huntington-gateway",
             "code_sha": "f" * 40,
         }), encoding="utf-8")
         plan2 = collect_runtime_inventory()

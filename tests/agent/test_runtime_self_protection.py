@@ -27,7 +27,7 @@ from agent import runtime_self_protection as rsp
 @pytest.fixture
 def fake_runtime(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
     """A venv whose pyvenv.cfg points at a uv-managed base interpreter."""
-    venv = tmp_path / "hermes-agent" / "venv"
+    venv = tmp_path / "huntington-agent" / "venv"
     venv.mkdir(parents=True)
     exe_dir = venv / ("Scripts" if sys.platform == "win32" else "bin")
     exe_dir.mkdir()

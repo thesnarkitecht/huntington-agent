@@ -25,7 +25,7 @@ hermes-agent/
 └── website/              # Docusaurus docs site
 ```
 
-Config: `~/.hermes/config.yaml` (settings), `~/.hermes/.env` (API keys) — both under `$HERMES_HOME` when it is set.
+Config: `~/.huntington/config.yaml` (settings), `~/.huntington/.env` (API keys) — both under `$HERMES_HOME` when it is set.
 
 ### Adding a Tool
 
@@ -59,8 +59,8 @@ registry.register(
 `_HERMES_CORE_TOOLS` (every platform) or to a specific toolset.
 
 All handlers must return JSON strings. Use `get_hermes_home()` for paths,
-never hardcode `~/.hermes`. For custom/local-only tools, write a plugin in
-`~/.hermes/plugins/` instead of editing core — see the developer docs.
+never hardcode `~/.huntington`. For custom/local-only tools, write a plugin in
+`~/.huntington/plugins/` instead of editing core — see the developer docs.
 
 ### Adding a Slash Command
 
@@ -95,7 +95,7 @@ scripts/run_tests.sh tests/tools/test_x.py    # one file
 scripts/run_tests.sh -v --tb=long             # pass-through pytest flags
 ```
 
-- Tests auto-redirect `HERMES_HOME` to temp dirs — never touch real `~/.hermes/`.
+- Tests auto-redirect `HERMES_HOME` to temp dirs — never touch real `~/.huntington/`.
 - Prepare Python through the PM developer workflow before building a test environment.
 - Run `python -m pm.build_env --source . --out .venv --group dev --group test`.
   The output must not exist. Stop its processes and intentionally remove only
@@ -103,9 +103,9 @@ scripts/run_tests.sh -v --tb=long             # pass-through pytest flags
 - The runner probes repository `.venv`, `venv`, and the standard source-install
   venv before falling back to `HERMES_PYTHON`. Each candidate must contain pytest.
 - **Windows:** run the same wrapper through Git Bash. See `references/windows-quirks.md`.
-- After editing `pyproject.toml`, run `hermes pm lock`, re-source `./activate`, and
+- After editing `pyproject.toml`, run `huntington pm lock`, re-source `./activate`, and
   commit `pyproject.toml` with `uv.lock`.
-  Do not mutate Hermes environments with raw pip or uv commands.
+  Do not mutate Huntington environments with raw pip or uv commands.
 
 Host-specific tests run on the real host. Use one `@pytest.mark.platforms(...)`
 marker per test, such as `@pytest.mark.platforms("windows", arch="arm64")`.

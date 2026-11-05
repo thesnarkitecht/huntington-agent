@@ -21,7 +21,7 @@ BOOT_FILES = (
     "hermes_cli/_early_recovery.py", "hermes_cli/_parser.py",
     "hermes_cli/venv_sync.py", "hermes_cli/steward.py",
     "hermes_cli/stderr_timestamp.py",
-    "scripts/hermes-gateway",
+    "scripts/huntington-gateway",
 )
 
 
@@ -265,7 +265,7 @@ def test_boot_migrates_legacy_conveniences_to_selected_runtime(tmp_path, monkeyp
         f'exec "{out}/hermes" acp "$@"\n', encoding="utf-8")
     # Mentions this install only in a comment and runs another checkout's venv.
     foreign = f'#!/bin/sh\n# user note about {repo}/venv/bin/hermes\nexec "{tmp_path}/other/venv/bin/hermes" "$@"\n'
-    (out / "hermes-agent").write_text(foreign, encoding="utf-8")
+    (out / "huntington-agent").write_text(foreign, encoding="utf-8")
 
     result = _launchers.expose_cli()
     assert result["ok"], result
@@ -278,7 +278,7 @@ def test_boot_migrates_legacy_conveniences_to_selected_runtime(tmp_path, monkeyp
         assert receipt["value"] == "migrated"
         assert receipt["argv"] == ["quoted argument"]
         assert Path(receipt["exe"]).samefile(interpreter)
-    assert (out / "hermes-agent").read_text(encoding="utf-8-sig") == foreign
+    assert (out / "huntington-agent").read_text(encoding="utf-8-sig") == foreign
     before = {p: p.stat().st_mtime_ns for p in out.iterdir()}
     assert _launchers.expose_cli()["written"] == []
     assert before == {p: p.stat().st_mtime_ns for p in out.iterdir()}
@@ -299,7 +299,7 @@ def _command_survives_generation_collection(tmp_path, monkeypatch, surface):
         (selected.parent / ".lease-managed").touch()
         if value == "old":
             if surface == "legacy":
-                command = [sys.executable, "-I", str(repo / "scripts/hermes-gateway"), "--help"]
+                command = [sys.executable, "-I", str(repo / "scripts/huntington-gateway"), "--help"]
                 args = ["gateway", "--help"]
             elif surface == "ssh":
                 from hermes_cli.windows_ssh_runtime import _resolve_direct_command
@@ -451,7 +451,7 @@ def test_windows_repair_upgrades_healthy_old_pm_external_launchers(tmp_path, mon
     from hermes_cli._install_repair import ensure_windows_bin_launchers
 
     repo, home, interpreter = fixture_tree(tmp_path, monkeypatch)
-    managed = home / "hermes-agent"
+    managed = home / "huntington-agent"
     shutil.move(repo, managed)
     external = home / "bin"
     external.mkdir()

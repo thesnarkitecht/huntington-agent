@@ -263,7 +263,7 @@ def test_an_agent_start_install_of_a_platform_keeps_the_restart_hint(tmp_path, m
     assert lcm.recover_at_startup(gateway_start=gateway_start) == ["homeassistant"]
     kept = lcm._claim_notices(home)
     assert kept[0].startswith("✓ Home Assistant moved out of core")
-    assert any("hermes gateway restart" in message for message in kept) is not gateway_start
+    assert any("huntington gateway restart" in message for message in kept) is not gateway_start
 
 
 
@@ -395,7 +395,7 @@ def test_old_spotify_commands_point_at_the_plugin(tmp_path, monkeypatch):
     """`hermes auth spotify` / `hermes spotify` name the new command and how to get it for this home."""
     home = _home(tmp_path)
     monkeypatch.setenv("HERMES_HOME", str(home))
-    hint = lcm.moved_command_hint("hermes auth", "spotify", "status")
+    hint = lcm.moved_command_hint("huntington auth", "spotify", "status")
     assert "`huntington auth status spotify` is now `huntington spotify status`" in hint
     assert "plugins install spotify" in hint
     assert "plugins install spotify" in lcm.moved_command_hint("hermes", "spotify")
@@ -421,7 +421,7 @@ def test_old_mcp_serve_spelling_names_the_plugin_command(tmp_path, monkeypatch, 
     assert "`huntington mcp serve` is now `huntington mcp-serve`" in err
     assert "plugins install mcp-serve" in err
     (home / "plugins" / "mcp-serve").mkdir(parents=True)
-    hint = lcm.moved_command_hint("hermes mcp", "serve")
+    hint = lcm.moved_command_hint("huntington mcp", "serve")
     assert "is now `huntington mcp-serve`" in hint and "install" not in hint
 
 
@@ -466,7 +466,7 @@ def test_old_langfuse_plugin_key_keeps_naming_the_catalog_plugin(tmp_path, monke
     for name in ("observability/langfuse", "langfuse"):
         message = _unknown_plugin_message(name)
         assert "moved out of core into the 'langfuse' plugin" in message
-        assert "hermes plugins install langfuse" in message
+        assert "huntington plugins install langfuse" in message
     assert "moved out of core" not in _unknown_plugin_message("nonexistent")
 
     plugin_dir = home / "plugins" / "langfuse"

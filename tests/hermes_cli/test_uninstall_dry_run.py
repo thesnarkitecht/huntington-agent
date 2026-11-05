@@ -5,7 +5,7 @@ from hermes_cli import uninstall
 
 
 def test_dry_run_prints_plan_without_mutating(monkeypatch, tmp_path, capsys):
-    project_root = tmp_path / "hermes-agent"
+    project_root = tmp_path / "huntington-agent"
     hermes_home = tmp_path / ".huntington"
     project_root.mkdir()
     # A .git dir marks the tree as a removable git checkout — without it the

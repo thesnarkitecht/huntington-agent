@@ -319,7 +319,7 @@ def test_same_name_backup_dir_does_not_shadow_the_live_plugin(name_collision: di
 
 def test_same_name_plugin_collision_is_reported(name_collision: dict[str, Any], request: pytest.FixtureRequest) -> None:
     live, backup = str(name_collision["live"]), str(name_collision["backup"])
-    surfaces = {"hermes plugins list": name_collision["listing"], "logs/*.log": name_collision["logs"]}
+    surfaces = {"huntington plugins list": name_collision["listing"], "logs/*.log": name_collision["logs"]}
     named_both = [where for where, text in surfaces.items() if live in text and backup in text]
     with known_gate(KNOWN, request.node.name, raises=KnownSymptom):
         symptom(named_both, f"two user plugin dirs declare the same name 'foo' ({live} and {backup}) but no "

@@ -114,15 +114,15 @@ CATALOG: list[AutomationBlueprint] = [
         schedule_template="{minute} {hour} * * *",
         prompt_template=(
             "Produce a concise morning briefing for the user: today's calendar "
-            "events, the local weather, and any urgent items. When Gmail/Google "
-            "Calendar are connected, follow the google-workspace skill's "
-            "references/daily-brief.md procedure (exact day window, conflict "
-            "detection, meeting prep, mail-to-meeting links). Keep it short and "
+            "events, the local weather, and any urgent items. When a mail and "
+            "calendar source is connected (Microsoft 365 through an MCP server, "
+            "or email through the himalaya skill), use it: exact day window, "
+            "conflict detection, meeting prep, mail-to-meeting links. Keep it short and "
             "scannable. If no data sources are connected, give a brief "
             "good-morning with the date and offer to connect calendar/email."
         ),
         slots=[_TIME("08:00"), _DELIVER],
-        skills=("google-workspace",),
+        skills=(),
         tags=("daily", "briefing"),
     ),
     AutomationBlueprint(

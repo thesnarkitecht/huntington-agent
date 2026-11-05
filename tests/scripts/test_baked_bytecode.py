@@ -9,9 +9,9 @@ from scripts.bundles.bytecode import MARKER, bake_bytecode
 
 
 def _make_payload(root: Path) -> Path:
-    (root / "hermes-agent" / "pkg").mkdir(parents=True)
-    (root / "hermes-agent" / "pkg" / "__init__.py").write_text("")
-    (root / "hermes-agent" / "pkg" / "mod.py").write_text("X = 1\n")
+    (root / "huntington-agent" / "pkg").mkdir(parents=True)
+    (root / "huntington-agent" / "pkg" / "__init__.py").write_text("")
+    (root / "huntington-agent" / "pkg" / "mod.py").write_text("X = 1\n")
     site = root / "venv" / f"lib/python{sys.version_info.major}.{sys.version_info.minor}" / "site-packages"
     site.mkdir(parents=True)
     (site / "dep.py").write_text("Y = 2\n")
@@ -25,7 +25,7 @@ def test_bake_produces_owner_writable_unchecked_hash_pycs(tmp_path):
     root = _make_payload(tmp_path)
     result = bake_bytecode(root, Path(sys.executable))
     assert (root / MARKER).read_text().strip() == "unchecked-hash"
-    pyc = next((root / "hermes-agent" / "pkg" / "__pycache__").glob("mod*.pyc"))
+    pyc = next((root / "huntington-agent" / "pkg" / "__pycache__").glob("mod*.pyc"))
     # PEP 552 header, little-endian flags at bytes 4..8: value 1 =
     # hash-based (bit0) and unchecked (bit1 clear). Timestamp pycs would be 0;
     # checked-hash would be 3.
@@ -42,7 +42,7 @@ def test_bake_fails_closed_on_uncompilable_module(tmp_path):
     silently shipping cold-compile-every-launch bytecode."""
     import subprocess as _sp
     root = _make_payload(tmp_path)
-    (root / "hermes-agent" / "pkg" / "broken.py").write_text("this is (( not python\n")
+    (root / "huntington-agent" / "pkg" / "broken.py").write_text("this is (( not python\n")
     with pytest.raises(_sp.CalledProcessError):
         bake_bytecode(root, Path(sys.executable))
 
@@ -54,11 +54,11 @@ def test_uncovered_reports_parseable_module_without_pyc(tmp_path):
     root = _make_payload(tmp_path)
     bake_bytecode(root, Path(sys.executable))
     from scripts.bundles.bytecode import _uncovered
-    missing, unparseable = _uncovered(root / "hermes-agent")
+    missing, unparseable = _uncovered(root / "huntington-agent")
     assert missing == [] and unparseable == 0
-    pyc = Path(cache_from_source(root / "hermes-agent" / "pkg" / "mod.py"))
+    pyc = Path(cache_from_source(root / "huntington-agent" / "pkg" / "mod.py"))
     pyc.unlink()
-    missing, _ = _uncovered(root / "hermes-agent")
+    missing, _ = _uncovered(root / "huntington-agent")
     assert [m.name for m in missing] == ["mod.py"]
 
 

@@ -2,14 +2,14 @@
 name: grounded-citations
 description: "Ground answers and documents in cited, verifiable sources."
 version: 1.2.0
-author: Hermes Agent + Teknium
+author: HUNTINGTON-AGENT + Teknium
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
   hermes:
     tags: [Research, Citations, Grounding, Sources, Web, Reports]
     category: research
-    related_skills: [arxiv, pdf, rss-feeds]
+    related_skills: [pdf, rss-feeds]
 ---
 
 # Grounded Citations
@@ -56,7 +56,7 @@ Override per task with `--ledger <path>` or `HERMES_CITATION_LEDGER`.
 ## How to Run
 
 ```bash
-S=~/.hermes/skills/research/grounded-citations/scripts/sources.py
+S=~/.huntington/skills/research/grounded-citations/scripts/sources.py
 
 python "$S" reset                                  # start a clean ledger
 python "$S" add https://example.com/a --title "A"  # prints: [1]
@@ -142,8 +142,8 @@ with every claim attributed to the platform it came from:
 | X/Twitter | `xurl` (needs API access) | announcements, developer chatter |
 
 The `reddit-reading` and `rss-feeds` skills are optional. If absent, install with
-`hermes skills install official/social-media/reddit-reading` or
-`hermes skills install official/research/rss-feeds` before using them.
+`huntington skills install official/social-media/reddit-reading` or
+`huntington skills install official/research/rss-feeds` before using them.
 
 Register every URL from every route in the ledger as it arrives (step ②). Keep
 opinion and measurement apart: a Reddit thread is evidence that users *report*

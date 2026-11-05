@@ -28,7 +28,7 @@ def fake_root(tmp_path, monkeypatch):
 
 def _live_record(hermes_home):
     return {
-        "pid": _LIVE_PID, "kind": "hermes-gateway", "gateway_state": "running", "start_time": 1000,
+        "pid": _LIVE_PID, "kind": "huntington-gateway", "gateway_state": "running", "start_time": 1000,
         "argv": ["python", "-m", "hermes_cli.main", "-p", "eagle", "gateway", "run"],
         "hermes_home": str(hermes_home),
     }

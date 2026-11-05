@@ -572,6 +572,8 @@ class GatewayTurnProgressMixin:
         _progress_len_fn: Any
         _PROGRESS_TEXT_LIMIT: int
         _edit_accepts_metadata: bool
+        # (message_id, text) the platform last accepted for a progress bubble.
+        _delivered: tuple = (None, None)
 
     def _progress_edit_state(self, adapter) -> TurnRunner._ProgressEditState:
         ctx = self._ctx
@@ -604,7 +606,10 @@ class GatewayTurnProgressMixin:
             kwargs["finalize"] = True
         if st._edit_accepts_metadata:
             kwargs["metadata"] = ctx._progress_metadata
-        return await st.adapter.edit_message(**kwargs)
+        result = await st.adapter.edit_message(**kwargs)
+        if getattr(result, "success", False):
+            st._delivered = (message_id, content)
+        return result
 
     @staticmethod
     def _progress_text(lines: list) -> str:
@@ -628,6 +633,8 @@ class GatewayTurnProgressMixin:
             chat_id=ctx.source.chat_id, content=text, reply_to=ctx._progress_reply_to, metadata=ctx._progress_metadata,
         )
         self._track_progress_result(result)
+        if getattr(result, "success", False) and getattr(result, "message_id", None):
+            st._delivered = (result.message_id, text)
         return result
 
     async def _roll_progress_overflow_if_needed(self, st) -> bool:
@@ -683,8 +690,13 @@ class GatewayTurnProgressMixin:
 
     async def _flush_progress_edit(self, st) -> None:
         if st.can_edit and st.progress_lines and st.progress_msg_id:
+            text = self._progress_text(st.progress_lines)
+            # The bubble already shows this text: an identical edit is a wasted platform call (and
+            # one that races the turn's end). Adapters that seal a bubble by editing still get it.
+            if st._delivered == (st.progress_msg_id, text) and not getattr(st.adapter, "REQUIRES_EDIT_FINALIZE", False):
+                return
             with suppress(Exception):
-                await self._edit_progress_message(st, st.progress_msg_id, self._progress_text(st.progress_lines))
+                await self._edit_progress_message(st, st.progress_msg_id, text)
 
     async def _drain_progress_on_cancel(self, st) -> None:
         ctx = self._ctx

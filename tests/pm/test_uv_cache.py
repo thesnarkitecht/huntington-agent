@@ -57,7 +57,7 @@ def test_bundle_uses_shipped_environment_until_an_extension_is_committed(monkeyp
     home = tmp_path / "home"
     monkeypatch.setenv("HERMES_HOME", str(home))
     payload = tmp_path / "payload"
-    core = payload / "hermes-agent"
+    core = payload / "huntington-agent"
     core.mkdir(parents=True)
     shipped = payload / "venv"
     shipped.mkdir()

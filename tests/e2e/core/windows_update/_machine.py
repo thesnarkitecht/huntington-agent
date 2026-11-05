@@ -177,7 +177,7 @@ class Machine:
 
     @property
     def install_dir(self) -> Path:
-        return self.hermes_home / "hermes-agent"
+        return self.hermes_home / "huntington-agent"
 
     @property
     def hermes_exe(self) -> Path:

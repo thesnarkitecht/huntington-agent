@@ -77,7 +77,7 @@ def test_explicit_replace_takeover_reacquires_lock_once(adapter):
     """Initial explicit --replace may hand off and re-acquire once (#65176)."""
     existing = {
         "pid": 4242,
-        "kind": "hermes-gateway",
+        "kind": "huntington-gateway",
         "argv": ["hermes", "gateway", "run"],
         "start_time": 123,
     }

@@ -107,7 +107,7 @@ print(json.dumps({canonicalize_name(d.metadata['Name']): d.version
     assert json.loads(result.stdout) == versions
     from pm import paths
     from pm.runtime import runtime_command
-    repo = moved / "hermes-agent"
+    repo = moved / "huntington-agent"
     repo.mkdir()
     (moved / "manifest.json").write_text('{"repo":"hermes-agent"}', encoding="utf-8")
     script = repo / "probe.py"

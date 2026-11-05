@@ -64,7 +64,7 @@ def test_per_task_home_sharing_the_tools_store_by_symlink_is_current(linked_home
     sb, first = linked_home["sb"], linked_home["install"]
     assert sb.hermes_home.is_symlink(), "harness: ~/.huntington is not a symlink"
     assert first.returncode == 0, "install.sh failed with ~/.huntington behind a symlink:\n" + I.describe(first)
-    assert (linked_home["real"] / "hermes-agent" / ".git").exists(), "install did not land on the symlink's target"
+    assert (linked_home["real"] / "huntington-agent" / ".git").exists(), "install did not land on the symlink's target"
     X.configure(sb, provider)
     alt = linked_home["root"] / "per-task home ü"
     alt.mkdir()

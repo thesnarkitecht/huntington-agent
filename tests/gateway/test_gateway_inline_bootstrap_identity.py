@@ -160,7 +160,7 @@ def test_live_payload_launched_gateway_is_found_for_its_home(argv, profile, foun
     monkeypatch.setenv("HERMES_HOME", str(root))
     monkeypatch.setattr(hermes_constants, "_default_hermes_root_memo", None, raising=False)
     record = {
-        "pid": 4242, "kind": "hermes-gateway", "gateway_state": "running", "start_time": 1000,
+        "pid": 4242, "kind": "huntington-gateway", "gateway_state": "running", "start_time": 1000,
         "argv": ["/opt/hermes/hermes-agent/hermes_cli/main.py", *argv], "hermes_home": str(home),
     }
     (home / "gateway_state.json").write_text(json.dumps(record), encoding="utf-8")

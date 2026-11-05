@@ -69,7 +69,7 @@ def updated(tmp_path_factory, provider):
     installed_gen = P.selected_generation(sb)
     target = P.publish_dependency_release(origin, root, 1)
     up = P.update(sb)
-    P.ok(up, "hermes update failed")
+    P.ok(up, "huntington update failed")
     assert P.selected_generation(sb) != installed_gen, "harness: update did not select a new generation"
     assert I.git("rev-parse", "HEAD", cwd=sb.checkout) == target
     return {"sb": sb, "target": target, "update": up, "origin": origin, "root": root}

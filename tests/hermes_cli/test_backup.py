@@ -95,10 +95,10 @@ def _make_hermes_tree(root: Path) -> None:
     (root / "profiles" / "coder" / ".env").write_text("ANTHROPIC_API_KEY=sk-ant-123\n")
 
     # hermes-agent repo (should be EXCLUDED)
-    (root / "hermes-agent").mkdir(exist_ok=True)
-    (root / "hermes-agent" / "run_agent.py").write_text("# big file\n")
-    (root / "hermes-agent" / ".git").mkdir()
-    (root / "hermes-agent" / ".git" / "HEAD").write_text("ref: refs/heads/main\n")
+    (root / "huntington-agent").mkdir(exist_ok=True)
+    (root / "huntington-agent" / "run_agent.py").write_text("# big file\n")
+    (root / "huntington-agent" / ".git").mkdir()
+    (root / "huntington-agent" / ".git" / "HEAD").write_text("ref: refs/heads/main\n")
 
     # __pycache__ (should be EXCLUDED)
     (root / "plugins").mkdir(exist_ok=True)
@@ -229,7 +229,7 @@ class TestIterBackupFiles:
 
         # The case the old automatic walk got wrong: a nested dir named
         # hermes-agent holding real skill content.
-        nested = root / "skills" / "autonomous-ai-agents" / "hermes-agent"
+        nested = root / "skills" / "autonomous-ai-agents" / "huntington-agent"
         nested.mkdir(parents=True)
         (nested / "SKILL.md").write_text("# nested skill\n")
 
@@ -872,7 +872,7 @@ class TestRoundTrip:
         assert (dst_home / "logs" / "agent.log").exists()
 
         # hermes-agent should NOT be present
-        assert not (dst_home / "hermes-agent").exists()
+        assert not (dst_home / "huntington-agent").exists()
         # __pycache__ should NOT be present
         assert not (dst_home / "plugins" / "__pycache__").exists()
         # PID files should NOT be present

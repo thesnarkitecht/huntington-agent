@@ -661,6 +661,12 @@ def _resolve_hermes_bin_dir() -> str | None:
     if payload_dir is not None and payload_dir.is_dir():
         _HERMES_BIN_DIR, _HERMES_BIN_DIR_IS_PAYLOAD = str(payload_dir), True
         return _HERMES_BIN_DIR
+    # HUNTINGTON-AGENT: this checkout's own launchers (`huntington`, and `hermes` for the engine's
+    # scripts) go first, so an upstream Hermes install's `hermes` on PATH never serves our children.
+    own_bin = Path(__file__).resolve().parents[2] / ".huntington" / "bin"
+    if (own_bin / ("huntington.exe" if _IS_WINDOWS else "huntington")).is_file():
+        _HERMES_BIN_DIR, _HERMES_BIN_DIR_IS_PAYLOAD = str(own_bin), True
+        return _HERMES_BIN_DIR
     which = shutil.which("hermes")
     argv0 = sys.argv[0] if sys.argv else ""
     base = os.path.basename(argv0).lower()

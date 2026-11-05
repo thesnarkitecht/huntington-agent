@@ -397,7 +397,7 @@ def format_session_db_unavailable(
     cause = get_last_init_error()
     if not cause:
         return (
-            f"{prefix}. {_SESSION_DB_CONSEQUENCE} Run `hermes {profile_arg}doctor` to check the "
+            f"{prefix}. {_SESSION_DB_CONSEQUENCE} Run `huntington {profile_arg}doctor` to check the "
             "storage location."
         )
     from hermes_state_user_copy import describe_storage_failure

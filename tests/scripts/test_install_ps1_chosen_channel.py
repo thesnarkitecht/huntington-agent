@@ -22,7 +22,7 @@ def test_installer_reads_the_channel_hermes_recorded(tmp_path, monkeypatch, chan
     if not powershell:
         pytest.skip("Windows PowerShell is required")
     home = tmp_path / "home"
-    install = home / "hermes-agent"
+    install = home / "huntington-agent"
     install.mkdir(parents=True)
     monkeypatch.setenv("HERMES_HOME", str(home))
     set_install_channel(channel, install)

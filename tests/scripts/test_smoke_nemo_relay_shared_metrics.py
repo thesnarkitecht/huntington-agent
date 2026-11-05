@@ -66,7 +66,7 @@ def test_gateway_stop_spares_a_process_that_is_not_the_homes_live_gateway(tmp_pa
     decoy = subprocess.Popen(["sleep", "300"])
     try:
         record = json.dumps({
-            "pid": decoy.pid, "kind": "hermes-gateway", "argv": ["hermes", "gateway", "run"],
+            "pid": decoy.pid, "kind": "huntington-gateway", "argv": ["hermes", "gateway", "run"],
             "start_time": status._get_process_start_time(decoy.pid) + start_time_shift,
             "hermes_home": str(tmp_path),
         })

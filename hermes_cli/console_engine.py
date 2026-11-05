@@ -200,7 +200,7 @@ class _CliSurface:
 
     def build(self, root: str, *, live: bool) -> _ArgumentParser:
         """Build a throwaway parser; ``live=False`` wires no-op handlers (summary extraction)."""
-        parser = _ArgumentParser(prog="hermes", add_help=False)
+        parser = _ArgumentParser(prog="huntington", add_help=False)
         subparsers = parser.add_subparsers(dest="_console_command")
         module = importlib.import_module(self.module)
         entry = getattr(module, self.builder)
@@ -344,8 +344,8 @@ def _register_command_family(
             return _dispatch(surface, root, fixed, args, namespace_update)
 
         engine.register(
-            full_path, usage, summaries.get(full_path) or f"Run `hermes {usage}`.", handler,
-            mutating=mutating, confirmation=f"Run `hermes {usage}`?")
+            full_path, usage, summaries.get(full_path) or f"Run `huntington {usage}`.", handler,
+            mutating=mutating, confirmation=f"Run `huntington {usage}`?")
 
 
 _BLOCKED_TOP = frozenset(
@@ -387,7 +387,7 @@ class HermesConsoleEngine:
             return ConsoleResult("ok")
         try:
             tokens = _split_line(raw_line)
-            if tokens and tokens[0] == "hermes":
+            if tokens and tokens[0] in ("hermes", "huntington"):
                 tokens = tokens[1:]
             if not tokens:
                 return ConsoleResult("ok", output=self.help_text())
@@ -477,7 +477,7 @@ class HermesConsoleEngine:
         if first.startswith("-"):
             return f"{first} is not available in Huntington Console."
         if first in _BLOCKED_TOP:
-            return f"`hermes {first}` is not available in Huntington Console."
+            return f"`huntington {first}` is not available in Huntington Console."
         return _BLOCKED_PAIRS.get(tuple(tokens[:2]), "")
 
     def _cap_output(self, output: str) -> str:

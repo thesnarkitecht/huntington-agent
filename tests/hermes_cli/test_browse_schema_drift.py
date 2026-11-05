@@ -939,7 +939,7 @@ import fcntl, json, os, sys, time
 fh = open(sys.argv[1], "a+")
 fcntl.flock(fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
 fh.seek(0); fh.truncate()
-json.dump({"pid": os.getpid(), "kind": "hermes-gateway", "hermes_home": sys.argv[2]}, fh); fh.flush()
+json.dump({"pid": os.getpid(), "kind": "huntington-gateway", "hermes_home": sys.argv[2]}, fh); fh.flush()
 print("held", flush=True)
 time.sleep(60)
 '''

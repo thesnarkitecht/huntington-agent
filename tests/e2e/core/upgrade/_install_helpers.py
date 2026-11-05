@@ -101,7 +101,7 @@ class Sandbox:
 
     @property
     def checkout(self) -> Path:
-        return self.hermes_home / "hermes-agent"
+        return self.hermes_home / "huntington-agent"
 
     @property
     def hermes(self) -> str:

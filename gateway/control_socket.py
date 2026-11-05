@@ -48,7 +48,7 @@ def _home_hash(home: Path) -> str:
 
 def windows_pipe_name(home: Path) -> str:
     """Per-HERMES_HOME named pipe path (Windows transport)."""
-    return rf"\\.\pipe\hermes-gateway-{_home_hash(home)}"
+    return rf"\\.\pipe\huntington-gateway-{_home_hash(home)}"
 
 
 def _fits_sun_path(path: Path) -> bool:

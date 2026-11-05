@@ -25,7 +25,7 @@ def _running_venv_site_packages() -> Path:
 
 def _physical_repo_root(tmp_path: Path) -> Path:
     """Create the physical repo checkout directory for junction tests."""
-    physical_root = tmp_path / "physical-home" / "hermes-agent"
+    physical_root = tmp_path / "physical-home" / "huntington-agent"
     physical_root.mkdir(parents=True)
     return physical_root
 
@@ -591,7 +591,7 @@ def test_launcher_alias_provenance(child_env, monkeypatch, link_at, profile):
     from hermes_cli.gateway_windows import _preserve_hermes_home_path
     from hermes_cli.profiles import resolve_profile_env
     physical_home = child_env / "physical-home"
-    physical_root = physical_home / "hermes-agent"
+    physical_root = physical_home / "huntington-agent"
     physical_root.mkdir(parents=True)
     configured = child_env / "configured-home"
     if link_at == "home":
@@ -599,14 +599,14 @@ def test_launcher_alias_provenance(child_env, monkeypatch, link_at, profile):
     else:
         configured.mkdir()
         if link_at == "repo":
-            _make_directory_link(configured / "hermes-agent", physical_root)
+            _make_directory_link(configured / "huntington-agent", physical_root)
         else:
-            (configured / "hermes-agent").mkdir()
+            (configured / "huntington-agent").mkdir()
     (configured / "profiles/coder").mkdir(parents=True)
     (configured / "profiles/coder/config.yaml").write_text("{}\n", encoding="utf-8")
     unrelated = child_env / "user-tools/hermes-agent"
     unrelated.mkdir(parents=True)
-    lexical_root = configured / "hermes-agent"
+    lexical_root = configured / "huntington-agent"
     monkeypatch.setenv("HERMES_HOME", str(configured))
     assert Path(resolve_profile_env("default")) == configured
     assert Path(resolve_profile_env("coder")) == configured / "profiles/coder"
@@ -827,7 +827,7 @@ class TestNativeEnvironmentContracts:
         from tools.environments import local
         from tools.environments import local_pythonpath
 
-        repo_root = tmp_path / "hermes-agent"
+        repo_root = tmp_path / "huntington-agent"
         runtime_venv = repo_root / "venv"
         runtime_sp = runtime_venv / "Lib" / "site-packages"
         runtime_sp.mkdir(parents=True)
@@ -857,7 +857,7 @@ class TestNativeEnvironmentContracts:
         from tools.environments import local
         from tools.environments import local_pythonpath
 
-        repo_root = tmp_path / "hermes-agent"
+        repo_root = tmp_path / "huntington-agent"
         repo_root.mkdir()
         unrelated_venv = tmp_path / "user-venv"
         unrelated_sp = unrelated_venv / "Lib" / "site-packages"
@@ -1090,7 +1090,7 @@ class TestNativeEnvironmentContracts:
             configured_home,
         )
 
-        assert launcher_entry == configured_home / "hermes-agent"
+        assert launcher_entry == configured_home / "huntington-agent"
         assert launcher_entry in aliases
 
         monkeypatch.setattr(local, "_hermes_repo_root_aliases", aliases)
@@ -1124,7 +1124,7 @@ class TestNativeEnvironmentContracts:
         from hermes_cli.profiles import resolve_profile_env
 
         physical_home = tmp_path / "physical-home"
-        physical_root = physical_home / "hermes-agent"
+        physical_root = physical_home / "huntington-agent"
         physical_root.mkdir(parents=True)
         (physical_home / "profiles" / "coder").mkdir(parents=True)
         (physical_home / "profiles" / "coder" / "config.yaml").write_text("{}\n")  # identity marker
@@ -1136,7 +1136,7 @@ class TestNativeEnvironmentContracts:
 
         # Launcher contract: the configured spelling is the env and the root.
         monkeypatch.setenv("HERMES_HOME", str(configured_home))
-        lexical_root = configured_home / "hermes-agent"
+        lexical_root = configured_home / "huntington-agent"
 
         # Profile re-home keeps the configured spelling (physically identical
         # through the link; lexically the launcher spelling is preserved).
@@ -1172,11 +1172,11 @@ class TestNativeEnvironmentContracts:
         configured_home.mkdir()
         # repo-level link: <configured-home>/hermes-agent -> physical repo
         try:
-            _make_directory_link(configured_home / "hermes-agent", physical_root)
+            _make_directory_link(configured_home / "huntington-agent", physical_root)
         except OSError as exc:
             pytest.skip(f"directory link unavailable on this host: {exc}")
 
-        lexical_root = configured_home / "hermes-agent"
+        lexical_root = configured_home / "huntington-agent"
         aliases = local_pythonpath._build_hermes_repo_root_aliases(
             physical_root.resolve(),
             physical_root,
@@ -1200,8 +1200,8 @@ class TestNativeEnvironmentContracts:
 
         physical_root = _physical_repo_root(tmp_path)
         configured_home = tmp_path / "configured-home"
-        (configured_home / "hermes-agent").mkdir(parents=True)
-        unrelated = tmp_path / "user-tools" / "hermes-agent"
+        (configured_home / "huntington-agent").mkdir(parents=True)
+        unrelated = tmp_path / "user-tools" / "huntington-agent"
         unrelated.mkdir(parents=True)
 
         aliases = local_pythonpath._build_hermes_repo_root_aliases(
@@ -1209,11 +1209,11 @@ class TestNativeEnvironmentContracts:
             physical_root,
             configured_home,
         )
-        for lookalike in (configured_home / "hermes-agent", unrelated):
+        for lookalike in (configured_home / "huntington-agent", unrelated):
             assert not any(local_pythonpath._same_path(a, lookalike) for a in aliases)
 
         monkeypatch.setattr(local, "_hermes_repo_root_aliases", aliases)
-        for lookalike in (configured_home / "hermes-agent", unrelated):
+        for lookalike in (configured_home / "huntington-agent", unrelated):
             env = {"PYTHONPATH": os.pathsep.join([str(lookalike), "/home/user/my-lib"])}
             local_pythonpath._strip_hermes_owned_pythonpath(env)
             assert env["PYTHONPATH"].split(os.pathsep) == [str(lookalike), "/home/user/my-lib"]
@@ -1231,19 +1231,19 @@ class TestNativeEnvironmentContracts:
         configured_root = tmp_path / "configured-root"
         (configured_root / "profiles" / "coder").mkdir(parents=True)
         try:
-            _make_directory_link(configured_root / "hermes-agent", physical_root)
+            _make_directory_link(configured_root / "huntington-agent", physical_root)
         except OSError as exc:
             pytest.skip(f"directory link unavailable on this host: {exc}")
 
         configured_home = configured_root / "profiles" / "coder"
-        lexical_root = configured_root / "hermes-agent"
+        lexical_root = configured_root / "huntington-agent"
         aliases = local_pythonpath._build_hermes_repo_root_aliases(
             physical_root.resolve(),
             physical_root,
             configured_home,
         )
         assert any(local_pythonpath._same_path(a, lexical_root) for a in aliases)
-        assert not any(local_pythonpath._same_path(a, configured_home / "hermes-agent") for a in aliases)
+        assert not any(local_pythonpath._same_path(a, configured_home / "huntington-agent") for a in aliases)
 
         monkeypatch.setattr(local, "_hermes_repo_root_aliases", aliases)
         env = {"PYTHONPATH": os.pathsep.join([str(lexical_root), "/home/user/my-lib"])}
@@ -1266,11 +1266,11 @@ class TestNativeEnvironmentContracts:
         configured_home = tmp_path / "configured-home"
         configured_home.mkdir()
         try:
-            _make_directory_link(configured_home / "hermes-agent", physical_root)
+            _make_directory_link(configured_home / "huntington-agent", physical_root)
         except OSError as exc:
             pytest.skip(f"directory link unavailable on this host: {exc}")
 
-        lexical_root = configured_home / "hermes-agent"
+        lexical_root = configured_home / "huntington-agent"
         aliases = local_pythonpath._build_hermes_repo_root_aliases(
             physical_root.resolve(),
             physical_root,

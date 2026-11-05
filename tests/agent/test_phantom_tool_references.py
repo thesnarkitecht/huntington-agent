@@ -125,5 +125,5 @@ class TestEssentialOnlySync:
 
         assert result["skipped_opt_out"] is True
         assert result["copied"] == ["hermes-agent"]
-        assert (home / "skills" / "autonomous-ai-agents" / "hermes-agent" / "SKILL.md").exists()
+        assert (home / "skills" / "autonomous-ai-agents" / "huntington-agent" / "SKILL.md").exists()
         assert not (home / "skills" / "media").exists()

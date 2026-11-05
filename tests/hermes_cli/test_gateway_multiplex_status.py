@@ -33,7 +33,7 @@ def _fake_multiplexer(monkeypatch, tmp_path, *, multiplex: bool, pid_file: bool 
     if pid_file:
         (tmp_path / "gateway.pid").write_text(str(os.getpid()))
     (tmp_path / "gateway_state.json").write_text(json.dumps({
-        "pid": os.getpid(), "kind": "hermes-gateway", "gateway_state": "running",
+        "pid": os.getpid(), "kind": "huntington-gateway", "gateway_state": "running",
         "start_time": status._get_process_start_time(os.getpid()), "hermes_home": str(tmp_path),
     }))
     monkeypatch.setenv("HERMES_HOME", str(tmp_path / "profiles" / "beta"))

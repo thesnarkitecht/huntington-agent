@@ -30,7 +30,7 @@ def test_unknown_subcommand_names_typo_suggests_closest_and_hides_choice_list():
     text = _parse_error(["sesions"])
     assert "'sesions' is not a `huntington` command" in text
     assert "Did you mean: sessions" in text
-    assert "hermes --help" in text
+    assert "huntington --help" in text
     assert "choose from" not in text
     assert "invalid choice" not in text
 

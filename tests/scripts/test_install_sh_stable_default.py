@@ -39,7 +39,7 @@ def _git(cwd, *args, env=None):
 ])
 def test_install_lands_on_the_latest_stable_release(tmp_path, side, start, args, tagged, lands):
     origin, home, bin_dir = tmp_path / "origin", tmp_path / "home", tmp_path / "bin"
-    install = home / ".huntington" / "hermes-agent"
+    install = home / ".huntington" / "huntington-agent"
     for d in (origin, home, bin_dir):
         d.mkdir()
     _git(origin, "init", "-q", "-b", "main")

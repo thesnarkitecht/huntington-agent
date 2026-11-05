@@ -60,7 +60,7 @@ class TestModelSwitchSkewGuard:
         assert msg is not None
         assert "abc1234567" in msg
         assert "def4567890" in msg
-        assert "hermes gateway restart" in msg
+        assert "huntington gateway restart" in msg
 
 
 class TestDashboardCodeSkewGuard:
@@ -87,7 +87,7 @@ class TestDashboardCodeSkewGuard:
         assert msg is not None
         assert "Desktop-owned backend" in msg
         assert "systemctl" not in msg
-        assert "hermes-dashboard" not in msg
+        assert "huntington-dashboard" not in msg
 
 
 class TestModelOptionsSkewGuard:

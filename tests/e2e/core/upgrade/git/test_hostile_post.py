@@ -295,7 +295,7 @@ def _namespace(w: G.World) -> Iterator[NamespaceHost]:
 
 def _ns_cli(host: NamespaceHost, w: G.World, *args: str, timeout: float = 600):
     cp = host.run([w.sb.hermes, *args], timeout=timeout)
-    w.transcripts.append(f"$ hermes {' '.join(args)} -> rc={cp.returncode}\n{(cp.stdout or '')[-6000:]}\n"
+    w.transcripts.append(f"$ huntington {' '.join(args)} -> rc={cp.returncode}\n{(cp.stdout or '')[-6000:]}\n"
                          f"{(cp.stderr or '')[-3000:]}")
     return cp
 
@@ -556,7 +556,7 @@ def test_sticky_profile_update_logs_and_receipts_land_in_the_root_home(w):
             f"root latest.json is not this run's success:\n{diag}"
         # The readers follow the writers: `hermes logs update` under the profile shows the root log.
         logs_cp = w.sb.cli("logs", "update", "-n", "400", timeout=300)
-        assert logs_cp.returncode == 0 and "hermes update started" in G.output(logs_cp), \
+        assert logs_cp.returncode == 0 and "huntington update started" in G.output(logs_cp), \
             f"`huntington logs update` under the sticky profile does not show the root update.log:\n{H.describe(logs_cp)}\n{diag}"
     finally:
         w.sb.cli("profile", "use", "default", timeout=300)

@@ -507,7 +507,7 @@ def requires_hermes_error(manifest: PluginManifest | Mapping[str, Any]) -> Optio
     current = running_hermes_version()
     if version_satisfies(spec, current):
         return None
-    return f"requires hermes {spec}, running {current}"
+    return f"requires huntington {spec}, running {current}"
 
 
 def portable_plugin_manifest(child: Path, source: str, prefix: str) -> PluginManifest:

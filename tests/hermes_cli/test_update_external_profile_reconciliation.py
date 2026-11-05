@@ -35,7 +35,7 @@ def _checkout(root: Path) -> Path:
 def _gateway_state(home: Path, pid: int, entrypoint: Path, sha: str) -> None:
     home.mkdir(parents=True, exist_ok=True)
     (home / "gateway_state.json").write_text(json.dumps({
-        "gateway_state": "running", "kind": "hermes-gateway", "pid": pid,
+        "gateway_state": "running", "kind": "huntington-gateway", "pid": pid,
         "argv": [str(entrypoint), "gateway", "run"], "code_sha": sha, "code_version": "1.0",
     }), encoding="utf-8")
 
@@ -51,7 +51,7 @@ def external_profile_host(tmp_path, monkeypatch):
     updater_main = update_receipt._updater_code_root() / "hermes_cli" / "main.py"
     _gateway_state(root, 1111, updater_main, SHA)
 
-    other_checkout = _checkout(tmp_path / "other_install" / "hermes-agent")
+    other_checkout = _checkout(tmp_path / "other_install" / "huntington-agent")
     other_home = tmp_path / "other_install" / "home"
     _gateway_state(other_home, 4242, other_checkout / "hermes_cli" / "main.py", "f" * 40)
     (root / "profiles").mkdir()
@@ -74,7 +74,7 @@ def external_profile_host(tmp_path, monkeypatch):
 def _restart_outcome() -> fleet._GatewayRestartOutcome:
     # The root's own LaunchAgent was restarted; the other install's gateway was left alone.
     return fleet._GatewayRestartOutcome(
-        False, [], [1111, 4242], ["ai.hermes.gateway"], [], [], [], set(),
+        False, [], [1111, 4242], ["ai.huntington.gateway"], [], [], [], set(),
     )
 
 

@@ -11,7 +11,7 @@ from tools.self_repo_guard import (
 
 @pytest.fixture
 def repo(tmp_path):
-    root = tmp_path / "hermes-agent"
+    root = tmp_path / "huntington-agent"
     root.mkdir()
     subprocess.run(["git", "init", "-q", str(root)], check=True)
     (root / "agent").mkdir()

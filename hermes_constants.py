@@ -13,6 +13,18 @@ from collections.abc import Callable, Mapping, MutableMapping
 from contextvars import ContextVar, Token
 from pathlib import Path
 
+
+
+def apply_huntington_env_aliases(environ: MutableMapping[str, str] = os.environ) -> None:
+    """HUNTINGTON-AGENT: ``HUNTINGTON_<NAME>`` sets ``HERMES_<NAME>`` unless that is already set.
+    Inline here (not a sibling module) because this file must import on its own (update staging)."""
+    for key, value in list(environ.items()):
+        if key.startswith("HUNTINGTON_") and len(key) > len("HUNTINGTON_"):
+            environ.setdefault("HERMES_" + key[len("HUNTINGTON_"):], value)
+
+
+apply_huntington_env_aliases()
+
 _profile_fallback_warned: bool = False
 _UNSET = object()
 _HERMES_HOME_OVERRIDE: ContextVar[str | object] = ContextVar("_HERMES_HOME_OVERRIDE", default=_UNSET)

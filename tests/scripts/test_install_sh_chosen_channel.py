@@ -28,7 +28,7 @@ def test_rerun_keeps_a_chosen_channel_checkout(tmp_path, monkeypatch, channel, m
     from hermes_cli.update_channel import set_install_channel
 
     origin, home = tmp_path / "origin", tmp_path / "home"
-    install = home / "hermes-agent"
+    install = home / "huntington-agent"
     origin.mkdir()
     home.mkdir()
     _git(origin, "init", "-b", "main")

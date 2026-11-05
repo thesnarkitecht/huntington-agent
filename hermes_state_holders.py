@@ -611,7 +611,7 @@ def held_store_refusal(db_path: Path, *, command: str, force_hint: Optional[str]
     lines += [
         "Rewriting the database under a live writer is how every agent ends up refusing turns with the "
         "retired state.db-wal error. Nothing is lost.",
-        f"Stop them first (`hermes {profile_arg}gateway stop`, quit the Desktop app, pause cron), then re-run.",
+        f"Stop them first (`huntington {profile_arg}gateway stop`, quit the Desktop app, pause cron), then re-run.",
     ]
     if force_hint:
         lines.append(f"Override with {force_hint} if you accept the risk.")

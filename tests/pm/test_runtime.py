@@ -106,7 +106,7 @@ def test_sealed_worker_command_uses_only_its_recorded_site(tmp_path, monkeypatch
     from pm import paths
     from pm.runtime import runtime_command
 
-    repo = tmp_path / "payload" / "hermes-agent"
+    repo = tmp_path / "payload" / "huntington-agent"
     repo.mkdir(parents=True)
     (repo.parent / "manifest.json").write_text('{"repo":"hermes-agent"}')
     runtime = repo.parent / "pm-runtime"

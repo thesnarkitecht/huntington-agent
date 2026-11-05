@@ -1,0 +1,48 @@
+# HUNTINGTON-AGENT catalog entry: Microsoft 365 (Outlook mail and calendar, OneDrive, SharePoint,
+# Excel, Teams, Planner, To Do) through Microsoft Graph.
+manifest_version: 1
+
+name: microsoft-365
+description: >-
+  Microsoft 365 work account via Microsoft Graph: Outlook mail and calendar, OneDrive and
+  SharePoint files, Excel workbooks, Teams chats and channels, Planner and To Do.
+source: https://github.com/Softeria/ms-365-mcp-server
+
+# Local stdio server (MIT, Softeria), pinned to an exact release at least 14 days old (the repo's
+# npm min-release-age policy). --org-mode turns on the work-account tools (Teams, SharePoint,
+# shared mailboxes). Sign-in is Microsoft's device-code flow; tokens stay in the OS credential store.
+transport:
+  type: stdio
+  command: npx
+  args:
+    - "-y"
+    - "@softeria/ms-365-mcp-server@0.170.2"
+    - "--org-mode"
+  version: "0.170.2"
+
+auth:
+  type: none
+
+suggest:
+  keywords:
+    - outlook
+    - office 365
+    - microsoft 365
+    - onedrive
+    - sharepoint
+    - excel
+    - teams
+    - calendar
+  hosts:
+    - outlook.office.com
+    - office.com
+    - sharepoint.com
+    - onedrive.live.com
+
+post_install: |
+  Sign in once with your work account: ask the agent to run the `login` tool, or run
+    npx -y @softeria/ms-365-mcp-server@0.170.2 --org-mode --login
+  and follow the device-code prompt. Then start a new session so the tools load.
+  By default the server uses Softeria's multi-tenant Azure app. To keep consent inside the
+  Huntington tenant, an admin can register an app and set MS365_MCP_CLIENT_ID and
+  MS365_MCP_TENANT_ID; add --read-only to the args for a read-only deployment.

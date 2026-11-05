@@ -109,7 +109,7 @@ def test_collect_fleet_versions_classifies_separate_checkout_gateway(tmp_path, m
     home = tmp_path / "fleet_home"
     home.mkdir()
     (home / "gateway_state.json").write_text(json.dumps({
-        "gateway_state": "running", "kind": "hermes-gateway", "pid": 4242,
+        "gateway_state": "running", "kind": "huntington-gateway", "pid": 4242,
         "argv": [str(pinned / "hermes_cli" / "main.py"), "gateway", "run"],
         "code_sha": "f" * 40, "code_version": "0.0.1",
     }), encoding="utf-8")

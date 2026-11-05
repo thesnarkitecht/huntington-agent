@@ -1064,7 +1064,7 @@ def _owns_installed_desktop_apps() -> bool:
         return False
     from hermes_cli.main import PROJECT_ROOT
     from hermes_constants import get_default_hermes_root
-    return Path(PROJECT_ROOT).resolve() == (get_default_hermes_root() / "hermes-agent").resolve()
+    return Path(PROJECT_ROOT).resolve() == (get_default_hermes_root() / "huntington-agent").resolve()
 
 
 def _installed_desktop_apps() -> list[Path]:

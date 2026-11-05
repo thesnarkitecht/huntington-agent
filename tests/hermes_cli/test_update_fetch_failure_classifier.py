@@ -91,7 +91,7 @@ class TestClassifyFetchFailure:
                                   text=True, encoding="utf-8", errors="replace",
                                   env={**os.environ, "GIT_CEILING_DIRECTORIES": str(tmp_path)}).stderr
 
-        damaged = tmp_path / "custom-dir" / "hermes-agent"
+        damaged = tmp_path / "custom-dir" / "huntington-agent"
         (damaged / ".git").mkdir(parents=True)
         update_cmd_git._print_fetch_failure(fetch(damaged, "origin"), git_cmd=["git"], root=damaged)
         out = capsys.readouterr().out

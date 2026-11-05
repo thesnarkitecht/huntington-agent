@@ -45,7 +45,7 @@ def _venv(root: Path) -> Path:
 def _payload(root: Path, python: str) -> Path:
     """A sealed payload layout whose recorded interpreter is *python*."""
     payload = root / "payload"
-    repo = payload / "hermes-agent"
+    repo = payload / "huntington-agent"
     repo.mkdir(parents=True)
     tools = payload / "tools" / "python"
     tools.mkdir(parents=True)

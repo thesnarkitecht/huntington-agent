@@ -12,6 +12,22 @@ that hand-edits hundreds of core files would conflict on nearly every sync. So:
 
 Sizes are from the tree at the time of the sync.
 
+## Status
+
+Done since this analysis was first written:
+- **Off-stack and risky skills removed.** That's the off-stack integrations plus pinggy-tunnel,
+  here-now, cloudflare-temporary-deploy, scrapling and obliteratus.
+- **Repo weight cut.** Removed upstream's docs site (only `website/static/api/model-catalog.json`
+  remains), contributor data, evals, the achievements and Google Meet plugins, and every language
+  except English. The plugin catalog is now a curated in-repo list, and 19 consumer MCP servers are
+  gone.
+- **Company defaults set.** Nous guest mode and telemetry are off, and the toolsets listed in
+  `DEFAULT_OFF_TOOLSETS` start off.
+- **Microsoft 365 added** to the MCP catalog.
+- **Fork CI and a weekly upstream-sync workflow** replace upstream's workflows.
+
+Still open by choice: the ML-training (mlops) optional skills stay.
+
 ## 1. Already removed in this branch
 
 | Removed | Size / scope | How |

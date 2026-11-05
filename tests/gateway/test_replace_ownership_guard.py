@@ -49,7 +49,7 @@ def profile_env(tmp_path, monkeypatch):
 def _record(pid=424242, start=111222333, home=None, argv=None):
     return {
         "pid": pid,
-        "kind": "hermes-gateway",
+        "kind": "huntington-gateway",
         "argv": argv or ["python", "-m", "hermes_cli.main", "gateway", "run"],
         "start_time": start,
         "hermes_home": home,

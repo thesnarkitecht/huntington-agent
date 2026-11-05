@@ -894,7 +894,7 @@ def run_import(args) -> Optional[int]:
 
         # Guidance
         print()
-        if not (hermes_root / "hermes-agent").is_dir():
+        if not (hermes_root / "huntington-agent").is_dir():
             print("Note: The hermes-agent codebase was not included in the backup.")
             print("  If this is a fresh install, run: huntington update")
 

@@ -20,11 +20,19 @@ owned=huntington/fork-owned-paths.txt
 upstream_url=https://github.com/NousResearch/hermes-agent.git
 upstream_branch=${UPSTREAM_BRANCH:-main}
 
+# A manifest line is a path or a glob (`plugin-catalog/*.yaml`); a `!path` line keeps that path even
+# when a glob matches it. Globs also drop files upstream adds later under the same pattern.
 remove_paths() {
-    local path
-    grep -v '^\s*#' "$manifest" | sed '/^\s*$/d' | while IFS= read -r path; do
-        git rm -r -q --cached --ignore-unmatch -- "$path" >/dev/null
-        rm -rf -- "$path"
+    local pattern path keep IFS=$'\n'
+    keep=$(grep '^!' "$manifest" | cut -c2- || true)
+    grep -v '^\s*[#!]' "$manifest" | sed '/^\s*$/d' | while IFS= read -r pattern; do
+        for path in $( { git ls-files -- "$pattern"; compgen -G "$pattern" || true; } | sort -u); do
+            if printf '%s\n' "$keep" | grep -qxF -- "$path"; then
+                continue
+            fi
+            git rm -r -q --cached --ignore-unmatch -- "$path" >/dev/null
+            rm -rf -- "$path"
+        done
     done
 }
 

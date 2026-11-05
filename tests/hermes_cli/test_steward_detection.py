@@ -82,9 +82,9 @@ class TestStampDrivenDetection:
         "unknown"), the way version_info already reports it."""
         from hermes_cli.version_info import _resolve_stamp_file
 
-        package = tmp_path / "store" / "lib" / "hermes-agent"
+        package = tmp_path / "store" / "lib" / "huntington-agent"
         package.mkdir(parents=True)
-        share = tmp_path / "store" / "share" / "hermes-agent"
+        share = tmp_path / "store" / "share" / "huntington-agent"
         share.mkdir(parents=True)
         _stamp(share, mechanism="external", distribution="nix")
         monkeypatch.setattr("pm.paths.repo_root", lambda: package)

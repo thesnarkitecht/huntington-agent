@@ -345,7 +345,7 @@ class TestPlatformToolsetConsistency:
         from hermes_cli.tools_config import PLATFORMS
         from toolsets import TOOLSETS
 
-        gateway_includes = set(TOOLSETS["hermes-gateway"]["includes"])
+        gateway_includes = set(TOOLSETS["huntington-gateway"]["includes"])
         # Exclude non-messaging platforms from the check
         non_messaging = {"cli", "api_server", "cron"}
         for platform, meta in PLATFORMS.items():
@@ -354,7 +354,7 @@ class TestPlatformToolsetConsistency:
             ts_name = meta["default_toolset"]
             assert ts_name in gateway_includes, (
                 f"Platform {platform!r} toolset {ts_name!r} missing from "
-                f"hermes-gateway includes"
+                f"huntington-gateway includes"
             )
 
     def test_skills_config_covers_tools_config_platforms(self):
@@ -450,7 +450,7 @@ class TestChromiumPostSetup:
             _run_post_setup("chromium")
 
         assert any(str(error) in c.args[0] for c in warn.call_args_list)
-        assert any("hermes tools post-setup chromium" in c.args[0] for c in info.call_args_list)
+        assert any("huntington tools post-setup chromium" in c.args[0] for c in info.call_args_list)
 
 
 class TestBrowserExecEngineCheckedForEveryBrowserRow:
@@ -476,7 +476,7 @@ class TestBrowserExecEngineCheckedForEveryBrowserRow:
             _ensure_browser_use_cli()  # must not raise
 
         assert any("browser-harness" in c.args[0] for c in warn.call_args_list)
-        assert any("hermes update" in c.args[0] for c in info.call_args_list)
+        assert any("huntington update" in c.args[0] for c in info.call_args_list)
 
 
 class TestImagegenBackendRegistry:

@@ -45,7 +45,7 @@ def _read_line(proc: subprocess.Popen, timeout: float = 60) -> str:
 
 
 def _checkout(tmp_path: Path) -> Path:
-    root = tmp_path / "hermes-agent"
+    root = tmp_path / "huntington-agent"
     desktop_dir = root / "apps" / "desktop"
     desktop_dir.mkdir(parents=True)
     (desktop_dir / "package.json").write_text("{}", encoding="utf-8")

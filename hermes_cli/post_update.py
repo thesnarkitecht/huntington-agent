@@ -205,7 +205,7 @@ def step_adopt_blessed_checkout(project_root: Path | None = None) -> dict:
 
     # The blessed roots: the canonical locations installers create.
     blessed = (
-        get_hermes_home() / "hermes-agent",
+        get_hermes_home() / "huntington-agent",
         Path("/usr/local/lib/hermes-agent"),
     )
 

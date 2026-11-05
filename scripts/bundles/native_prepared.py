@@ -78,7 +78,7 @@ def _check_links(path: Path, out: Path) -> None:
 
 
 def _input_paths(inputs: AgentInputs, out: Path) -> list[Path]:
-    expected = {"code": out / "hermes-agent", "project": out / "hermes-agent/pyproject.toml",
+    expected = {"code": out / "huntington-agent", "project": out / "hermes-agent/pyproject.toml",
                 "tools": out / "tools", "environment": out / "venv", "pm_runtime": out / "pm-runtime",
                 "features": out / "enabled-features.json"}
     if (any(getattr(inputs, key) != path for key, path in expected.items())

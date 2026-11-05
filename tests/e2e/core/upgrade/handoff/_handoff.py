@@ -97,7 +97,7 @@ class Install:
 
     @property
     def checkout(self) -> Path:
-        return self.hermes_home / "hermes-agent"
+        return self.hermes_home / "huntington-agent"
 
     @property
     def hermes(self) -> str:
@@ -170,7 +170,7 @@ def stage_n1(root: Path) -> Install:
     env = sb.env
     hermes_home = Path(env["HERMES_HOME"])
     hermes_home.mkdir(parents=True, exist_ok=True)
-    checkout = hermes_home / "hermes-agent"
+    checkout = hermes_home / "huntington-agent"
     # Local-path clone (objects shared, nothing packed), then the official URL as the remote; the
     # sandbox's ~/.gitconfig rewrites it to the local origin for every fetch the updater makes.
     I.git("clone", "-q", "--shared", "-b", "main", str(origin), str(checkout), cwd=root)

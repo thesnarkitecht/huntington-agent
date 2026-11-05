@@ -150,7 +150,7 @@ def test_claiming_marks_the_machine_and_the_next_probe_sees_it(machine):
 
 def test_gateway_service_definitions_name_their_homes(tmp_path, monkeypatch):
     home = tmp_path / "gw-home"
-    unit = tmp_path / "hermes-gateway.service"
+    unit = tmp_path / "huntington-gateway.service"
     unit.write_text(f'[Service]\nEnvironment="HERMES_HOME={home}"\n', encoding="utf-8")
     vbs = tmp_path / "Hermes_Gateway.vbs"
     vbs.write_text(f'env.Item("HERMES_HOME") = "{home}-win"\r\n', encoding="utf-8")
@@ -201,12 +201,12 @@ def test_a_gateway_service_counts_only_for_the_account_it_runs_as(tmp_path, monk
     me = getpass.getuser()
     units = {"mine": f"User={me}\n", "theirs": "User=nobody\n" if me != "nobody" else "User=root\n", "root": ""}
     for name, identity in units.items():
-        (tmp_path / f"hermes-gateway-{name}.service").write_text(
+        (tmp_path / f"huntington-gateway-{name}.service").write_text(
             f'[Service]\n{identity}Environment="HERMES_HOME={tmp_path / name}"\n', encoding="utf-8")
     monkeypatch.setattr(known_dirs, "gateway_service_definition_globs",
-                        lambda: (str(tmp_path / "hermes-gateway-[mt]*.service"),))
+                        lambda: (str(tmp_path / "huntington-gateway-[mt]*.service"),))
     monkeypatch.setattr(known_dirs, "system_gateway_service_definition_globs",
-                        lambda: (str(tmp_path / "hermes-gateway-root.service"),), raising=False)
+                        lambda: (str(tmp_path / "huntington-gateway-root.service"),), raising=False)
 
     homes = set(install_state._service_homes())
 

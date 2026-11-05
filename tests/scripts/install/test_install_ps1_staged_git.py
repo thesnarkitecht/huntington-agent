@@ -50,7 +50,7 @@ def test_stage_processes_restore_pinned_git_and_never_fall_back(tmp_path):
     env["PATH"] = str(poison) + os.pathsep + env["PATH"]
     stage("repository")  # new process; prerequisites' PATH cannot propagate
     stage("complete")  # the marker's bare git call is also a new process
-    checkout = home / "hermes-agent"
+    checkout = home / "huntington-agent"
     actual = subprocess.run([str(staged[0]), "-C", str(checkout), "rev-parse", "HEAD"],
                             check=True, capture_output=True, text=True).stdout.strip()
     marker = json.loads((checkout / ".hermes-bootstrap-complete").read_text(encoding="utf-8-sig"))

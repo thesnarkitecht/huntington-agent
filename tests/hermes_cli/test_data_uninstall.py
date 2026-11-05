@@ -145,7 +145,7 @@ def test_data_only_works_from_a_self_contained_runtime_without_an_app(layout, mo
     import json
 
     home, _, data = layout
-    package = home.parent / "usr" / "lib" / "hermes-agent"
+    package = home.parent / "usr" / "lib" / "huntington-agent"
     project = package / "app"
     (project / "hermes_cli").mkdir(parents=True)
     (project / "hermes_cli" / "__init__.py").write_text("", encoding="utf-8")

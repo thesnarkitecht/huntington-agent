@@ -94,7 +94,7 @@ def updated(tmp_path_factory, provider):
     logs = _seed_stray_venvs(sb)
     target = P.publish_dependency_release(origin, root, 1)
     up = P.update(sb, env=P.lazy_env(sb))
-    P.ok(up, "hermes update failed")
+    P.ok(up, "huntington update failed")
     assert I.git("rev-parse", "HEAD", cwd=sb.checkout) == target
     return {"sb": sb, "logs": logs}
 

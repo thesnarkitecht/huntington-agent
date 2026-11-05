@@ -1,0 +1,88 @@
+name: Upstream sync
+
+# Weekly: merge NousResearch/hermes-agent main with scripts/huntington/sync-upstream.sh, which
+# re-deletes removed paths, keeps fork-owned files and re-applies the rebrand. A clean merge that
+# passes the fork's policy tests opens a draft PR, and CI is dispatched on it. A merge that needs a
+# hand resolution opens an issue listing the files.
+
+on:
+  schedule:
+    - cron: "17 13 * * 1"  # Mondays 13:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  actions: write
+
+concurrency:
+  group: huntington-upstream-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@f548e57e544e1ff5a4c46bf1e1b8685f8e4a348a # v7.0.1
+        with:
+          fetch-depth: 0
+          ref: main
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.13"
+      - name: Merge upstream
+        id: merge
+        run: |
+          git config user.name "huntington-sync[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          branch="upstream-sync/$(date -u +%Y-%m-%d)"
+          git switch -c "$branch"
+          echo "branch=$branch" >> "$GITHUB_OUTPUT"
+          set +e
+          HERMES_PYTHON=python scripts/huntington/sync-upstream.sh > sync.log 2>&1
+          status=$?
+          set -e
+          cat sync.log
+          echo "status=$status" >> "$GITHUB_OUTPUT"
+          if [ "$status" -eq 0 ] && [ "$(git rev-list --count main..HEAD)" -eq 0 ]; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Report a merge that needs a hand resolution
+        if: steps.merge.outputs.status != '0'
+        run: |
+          {
+            echo "The weekly upstream merge stopped on files that need a hand resolution."
+            echo
+            echo '```'
+            tail -n 40 sync.log
+            echo '```'
+            echo
+            echo "Run \`scripts/huntington/sync-upstream.sh\` locally, resolve the listed files, and open a PR."
+          } > issue.md
+          gh issue create --title "Upstream sync needs a manual merge ($(date -u +%Y-%m-%d))" --body-file issue.md
+          exit 1
+      - name: Build the test environment
+        if: steps.merge.outputs.status == '0' && steps.merge.outputs.changed == 'true'
+        run: python -m pm.build_env --source . --out .venv --group dev --group test
+      - name: Fork policy contract
+        if: steps.merge.outputs.status == '0' && steps.merge.outputs.changed == 'true'
+        run: scripts/run_tests.sh tests/hermes_cli/test_huntington_policy.py
+      - name: Open the sync PR and run CI on it
+        if: steps.merge.outputs.status == '0' && steps.merge.outputs.changed == 'true'
+        env:
+          BRANCH: ${{ steps.merge.outputs.branch }}
+        run: |
+          branch="$BRANCH"
+          git push origin "$branch"
+          upstream=$(git rev-parse --short upstream/main)
+          gh pr create --draft --base main --head "$branch" \
+            --title "Upstream sync: NousResearch/hermes-agent@$upstream" \
+            --body "Weekly merge of upstream \`main\` (\`$upstream\`) via \`scripts/huntington/sync-upstream.sh\`. The fork policy tests passed in the sync job; the full CI run is dispatched on this branch. New upstream tests that assert upstream's wider defaults go in \`huntington/deselected-tests.txt\`."
+          # A PR opened with GITHUB_TOKEN does not trigger pull_request workflows; dispatch CI instead.
+          gh workflow run huntington-ci.yml --ref "$branch"

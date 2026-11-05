@@ -1,3 +1,4 @@
+# health: allow FILE_LINES -- HUNTINGTON-AGENT fork: one hook line applying hermes_cli/huntington.py CONFIG_DEFAULT_OVERRIDES to DEFAULT_CONFIG
 """Default configuration data for Hermes Agent: DEFAULT_CONFIG and OPTIONAL_ENV_VARS.
 
 Pure-data leaf module — must not import from hermes_cli.config. Comments are the user-facing
@@ -2075,7 +2076,7 @@ DEFAULT_CONFIG = {
             "export_interval_seconds": 60,
             "logs_export_interval_seconds": 5,
             "resource_attributes": {
-                "service.name": "hermes-gateway", "deployment.environment.name": "production"
+                "service.name": "huntington-gateway", "deployment.environment.name": "production"
             },
         },
         # OTLP destination. headers_env maps header names to ENVIRONMENT VARIABLE NAMES (never
@@ -2710,6 +2711,7 @@ DEFAULT_CONFIG = {
     },
     "_config_version": 52,  # Config schema version - bump this when adding new required fields
 }
+__import__("hermes_cli.huntington").huntington.apply_config_defaults(DEFAULT_CONFIG)  # HUNTINGTON-AGENT
 
 
 from hermes_cli.config_defaults_env import OptionalEnvVars, _base_url, _env, _msg, _prov, _setting, _skill, _tool

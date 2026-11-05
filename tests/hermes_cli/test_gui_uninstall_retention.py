@@ -15,7 +15,7 @@ def installation(request, tmp_path, monkeypatch):
     monkeypatch.setenv("HERMES_HOME", str(tmp_path / ".huntington"))
     home = get_hermes_home()
     assert home.resolve().is_relative_to(tmp_path.resolve())
-    root = home / "hermes-agent"
+    root = home / "huntington-agent"
     protected = {
         root / "hermes_cli" / "__init__.py": b"# agent source\n",
         root / "venv" / "runtime": b"agent runtime",

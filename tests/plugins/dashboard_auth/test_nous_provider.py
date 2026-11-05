@@ -130,7 +130,7 @@ class TestConstruction:
     def test_rejects_malformed_client_id(self):
         with pytest.raises(ValueError, match="agent:"):
             nous_plugin.NousDashboardAuthProvider(
-                client_id="hermes-dashboard", portal_url="https://x"
+                client_id="huntington-dashboard", portal_url="https://x"
             )
 
 # ---------------------------------------------------------------------------

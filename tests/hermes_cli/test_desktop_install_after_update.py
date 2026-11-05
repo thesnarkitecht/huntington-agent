@@ -181,9 +181,9 @@ def test_recorded_app_that_went_missing_comes_back_until_gui_uninstall(rebuilt, 
     from hermes_cli import main as hermes_main
 
     home = tmp_path / "hermes-home"
-    (home / "hermes-agent").mkdir(parents=True)
+    (home / "huntington-agent").mkdir(parents=True)
     monkeypatch.setenv("HERMES_HOME", str(home))
-    monkeypatch.setattr(hermes_main, "PROJECT_ROOT", home / "hermes-agent")
+    monkeypatch.setattr(hermes_main, "PROJECT_ROOT", home / "huntington-agent")
     (rebuilt / "Contents" / "Resources" / "install-stamp.json").write_text('{"updateMechanism": "self"}', encoding="utf-8")
     app = tmp_path / "Applications" / "Huntington.app"
     shutil.copytree(rebuilt, app)

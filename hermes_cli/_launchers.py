@@ -100,7 +100,11 @@ def installation_command(repo_root: Path, args=(), *, module: str = "hermes_cli.
 
 #: Launcher command names — keep in lockstep with scripts/install.ps1
 #: Publish-UserCommand and hermes_cli/_install_repair.py.
-WINDOWS_BIN_LAUNCHERS = ("hermes", "hermes-acp", "huntington")  # huntington: HUNTINGTON-AGENT command
+WINDOWS_BIN_LAUNCHERS = ("hermes", "hermes-acp", "huntington", "huntington-acp")
+#: HUNTINGTON-AGENT: only these reach PATH directories (~/.local/bin, %LOCALAPPDATA%\huntington\bin).
+#: The hermes* launchers stay checkout-local, where internal callers reach them by absolute path, so
+#: an upstream Hermes install's own `hermes` command is never shadowed or replaced.
+PUBLIC_LAUNCHERS = ("huntington", "huntington-acp")
 
 #: command name -> (entry module, callable) — mirrors pyproject.toml
 #: [project.scripts].
@@ -108,6 +112,7 @@ ENTRY_POINTS = {
     "hermes": ("hermes_cli.main", "main"),
     "hermes-acp": ("acp_adapter.entry", "main"),
     "huntington": ("hermes_cli.main", "main"),
+    "huntington-acp": ("acp_adapter.entry", "main"),
 }
 
 
@@ -563,6 +568,16 @@ def _owns_launcher(target: Path, root: Path) -> bool:
     return False
 
 
+def _retire_own_hermes_conveniences(root: Path, directory: Path) -> None:
+    """Remove ``hermes*`` PATH conveniences an earlier HUNTINGTON-AGENT build published for THIS
+    checkout (see PUBLIC_LAUNCHERS). A command that starts anything else, such as an upstream Hermes
+    install, is not ours and stays."""
+    for name in ("hermes", "hermes-acp", "hermes-agent"):
+        path = directory / name
+        if path.is_file() and _owns_launcher(path, root):
+            path.unlink(missing_ok=True)
+
+
 def _publish_conveniences(root: Path, out_dir: Path, names, *, create: bool = True) -> dict[Path, bool]:
     """User-bin commands forward to durable local launchers, not a Python pin."""
     if create:
@@ -858,9 +873,9 @@ def ensure_install_launchers(repo_root: Path, out_dir: Path) -> list[str]:
     if len(written) != len(WINDOWS_BIN_LAUNCHERS):
         return []
     if not _is_windows():
-        return [str(path) for path in _publish_conveniences(root, Path(out_dir), WINDOWS_BIN_LAUNCHERS)]
+        return [str(path) for path in _publish_conveniences(root, Path(out_dir), PUBLIC_LAUNCHERS)]
     Path(out_dir).mkdir(parents=True, exist_ok=True)
-    return [str(path) for name in WINDOWS_BIN_LAUNCHERS
+    return [str(path) for name in PUBLIC_LAUNCHERS
             if (path := stage_launcher(name, root, Path(out_dir))) is not None]
 
 
@@ -918,7 +933,8 @@ def expose_cli(project_root: Path | None = None, *, create: bool = True) -> dict
                 dirs.append(directory)
         written = []
         for directory in dirs:
-            published = _publish_conveniences(root, directory, (*WINDOWS_BIN_LAUNCHERS, "hermes-agent"), create=create)
+            published = _publish_conveniences(root, directory, PUBLIC_LAUNCHERS, create=create)
+            _retire_own_hermes_conveniences(root, directory)
             written.extend(path.name for path, changed in published.items() if changed)
         return {"ok": True, "written": written}
     except OSError as exc:
@@ -1082,14 +1098,14 @@ def _expose_windows_user_bin(root: Path, *, create: bool) -> dict:
     try:
         if not create:
             # Bootstrap: repair only commands we already own, enable nothing new.
-            published = _publish_conveniences(root, directory, WINDOWS_BIN_LAUNCHERS, create=False)
+            published = _publish_conveniences(root, directory, PUBLIC_LAUNCHERS, create=False)
             return {"ok": True, "written": [path.name for path, changed in published.items() if changed]}
         if not _is_home_checkout(root, store_root(root)) and (
                 other := _launcher_of_another_checkout(directory, root)) is not None:
             return {"ok": True, "skipped": f"{other} starts another checkout"}
         directory.mkdir(parents=True, exist_ok=True)
         written = ensure_install_launchers(root, directory)
-        if len(written) != len(WINDOWS_BIN_LAUNCHERS):
+        if len(written) != len(PUBLIC_LAUNCHERS):
             return {"ok": False, "error": "source launcher publication failed"}
         names = [Path(path).name for path in written]
         if not owns_user_path(directory.parent):
@@ -1173,6 +1189,7 @@ if __name__ == "__main__":
         parser.exit(1, "hermes: store interpreter is missing; finish pm install before publishing launchers\n")
     args.out_dir.mkdir(parents=True, exist_ok=True)
     written = ensure_install_launchers(repo_root, args.out_dir)
-    if len(written) != len(ENTRY_POINTS):
+    local_dir = args.out_dir.resolve() == (repo_root / ".huntington" / "bin").resolve()
+    if len(written) != (len(ENTRY_POINTS) if local_dir else len(PUBLIC_LAUNCHERS)):
         parser.exit(1, "hermes: launcher publication failed\n")
     print("\n".join(written))

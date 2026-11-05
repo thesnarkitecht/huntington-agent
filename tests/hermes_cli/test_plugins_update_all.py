@@ -12,7 +12,7 @@ def _parse(argv):
     from hermes_cli.plugins_cmd import plugins_command
     from hermes_cli.subcommands.plugins import build_plugins_parser
 
-    parser = argparse.ArgumentParser(prog="hermes")
+    parser = argparse.ArgumentParser(prog="huntington")
     build_plugins_parser(parser.add_subparsers(dest="command"), cmd_plugins=plugins_command)
     return parser.parse_args(["plugins", *argv])
 

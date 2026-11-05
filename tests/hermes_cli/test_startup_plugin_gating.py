@@ -83,7 +83,7 @@ def test_deferred_platform_loader_registers_cli_command_before_parser_table():
     assert cmd_info["plugin"] == "fake-photon-platform"
 
     # Same parser-table assembly main() uses after reading _cli_commands.
-    parser = argparse.ArgumentParser(prog="hermes")
+    parser = argparse.ArgumentParser(prog="huntington")
     subparsers = parser.add_subparsers(dest="command")
     for info in mgr._cli_commands.values():
         plugin_parser = subparsers.add_parser(

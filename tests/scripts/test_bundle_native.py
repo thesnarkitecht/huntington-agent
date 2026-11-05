@@ -149,7 +149,7 @@ def test_bundle_stages_git_tree_and_runs_native_children_before_manifest(tmp_pat
         assert "uv" not in kwargs
         assert kwargs["sealed"] is True
         assert kwargs["python"] == target_python
-        assert kwargs["source"] == output / "hermes-agent"
+        assert kwargs["source"] == output / "huntington-agent"
         assert kwargs.get("timeout", install_timeout) > install_timeout
         calls.append(kwargs)
         assert not (output / "manifest.json").exists()
@@ -201,7 +201,7 @@ def test_bundle_stages_git_tree_and_runs_native_children_before_manifest(tmp_pat
         with pytest.raises(ValueError, match="run preparation again"):
             load_prepared(prepared)
         changed.write_bytes(original)
-    moved = output / "hermes-agent"
+    moved = output / "huntington-agent"
     outside = tmp_path / "substituted-source"
     moved.rename(outside)
     moved.symlink_to(outside, target_is_directory=True)
@@ -256,8 +256,8 @@ def test_bundle_stages_git_tree_and_runs_native_children_before_manifest(tmp_pat
     with monkeypatch.context() as patch:
         # The desktop app points the bundled backend's store at the payload's tools dir.
         patch.setenv("HERMES_RUNTIME_DIR", str(output / "tools"))
-        patch.setattr("pm.paths.repo_root", lambda: output / "hermes-agent")
-        assert venv_is_current(project_root=output / "hermes-agent")
+        patch.setattr("pm.paths.repo_root", lambda: output / "huntington-agent")
+        assert venv_is_current(project_root=output / "huntington-agent")
     for name in stale:
         assert facts.get(name) is None
         assert not (output / "tools" / f"cached-{name}").exists()
@@ -288,7 +288,7 @@ def test_bundle_stages_git_tree_and_runs_native_children_before_manifest(tmp_pat
         assert run.stdout.strip() == "1.0"
         from pm import runtime as runtime_api, paths
         with monkeypatch.context() as patch:
-            patch.setattr(paths, "repo_root", lambda: moved / "hermes-agent")
+            patch.setattr(paths, "repo_root", lambda: moved / "huntington-agent")
             run = subprocess.run(runtime_api.runtime_command(moved / "hermes-agent/pm/launch.py", ["status"]),
                                  cwd=tmp_path, env=runtime_api.runtime_environment(), capture_output=True, text=True, timeout=30, check=False)
         assert run.returncode == 0, run.stderr
@@ -659,7 +659,7 @@ def test_native_preparation_refuses_symlinked_output_before_writing(tmp_path, mo
     outside = tmp_path / "outside"
     outside.mkdir()
     (outside / "keep").write_text("untouched", encoding="utf-8")
-    (output / "hermes-agent").symlink_to(outside, target_is_directory=True)
+    (output / "huntington-agent").symlink_to(outside, target_is_directory=True)
     with pytest.raises(ValueError, match="symlink|escaped"):
         native.prepare_native(out=output, ref="HEAD", source=Path(__file__).resolve().parents[2],
                               cache=tmp_path / "cache")

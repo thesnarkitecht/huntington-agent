@@ -2,7 +2,7 @@
 name: pdf
 description: "PDF files: create, read, merge, fill, OCR, edit text."
 version: 1.1.0
-author: Nous Research
+author: HIP
 license: MIT
 platforms: [linux, macos, windows]
 metadata:
@@ -33,17 +33,17 @@ Create PDFs from structured specs, build and fill AcroForm forms (with layout li
 
 - Python 3.10+ with `pypdf`, `reportlab`, `pdfplumber`.
 - Pick the interpreter with `terminal`. Use `python` when it already imports
-  the libraries (the Hermes Docker image ships them). Otherwise, when `hermes`
-  is on PATH, let Hermes build its shared, pinned documents environment under
-  the Hermes home: it survives container restarts, never touches the Hermes
+  the libraries (the Huntington Docker image ships them). Otherwise, when `huntington`
+  is on PATH, let Huntington build its shared, pinned documents environment under
+  the Huntington home: it survives container restarts, never touches the Huntington
   install itself, and is safe to run from several agents at once. When it is
-  not (the terminal runs in a Docker sandbox, which has no Hermes), the block
+  not (the terminal runs in a Docker sandbox, which has no Huntington), the block
   builds a venv in the sandbox home with the same pinned versions. Use this
   exact block in every document skill so they all share one environment:
 
   ```bash
   python -c "import pypdf, reportlab, pdfplumber" 2>/dev/null && PY=python || if command -v hermes >/dev/null 2>&1; then
-    PY="$(hermes pm environment documents --extra documents --extra documents-pdf)"
+    PY="$(huntington pm environment documents --extra documents --extra documents-pdf)"
   else
     PY="$HOME/.cache/hermes-docs-venv/bin/python"
     "$PY" -c "import docx, openpyxl, pptx, reportlab, pypdf, pdfplumber, pypdfium2" 2>/dev/null || (
@@ -67,11 +67,11 @@ Create PDFs from structured specs, build and fill AcroForm forms (with layout li
   "$PY" scripts/pdf_create.py --help
   ```
 
-  Run every helper below with `"$PY"`. In PowerShell (Hermes runs on that
+  Run every helper below with `"$PY"`. In PowerShell (Huntington runs on that
   host, so it is on PATH):
-  `$env:PY = hermes pm environment documents --extra documents --extra documents-pdf`.
-  Never `pip install` into the interpreter that runs Hermes or into the
-  `hermes pm environment` one; Hermes owns both.
+  `$env:PY = huntington pm environment documents --extra documents --extra documents-pdf`.
+  Never `pip install` into the interpreter that runs Huntington or into the
+  `huntington pm environment` one; Huntington owns both.
 - Page rasterization (`pdf_page_image.py`, overlay rendering) uses `pypdfium2`, which the documents environment already has (if your `python` lacks it, switch `PY` to that environment with the command above), or poppler's `pdftoppm` on PATH. Scripts fall back pypdfium2 → pdftoppm and report `{"rendered": false, "missing": [...]}` (exit 0) when neither exists.
 - Each helper script checks imports lazily and prints an install hint if a dependency is missing.
 

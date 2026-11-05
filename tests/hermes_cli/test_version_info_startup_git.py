@@ -25,7 +25,7 @@ def _run_logging_git(tmp_path: Path, code: str) -> tuple[dict, list[str]]:
     home = tmp_path / "home"
     # Version resolution falls back to <HERMES_HOME>/hermes-agent when the executing tree has no
     # .git (sdist/archive test runs); give it a tagged checkout so the release walk always has one.
-    repo = home / "hermes-agent"
+    repo = home / "huntington-agent"
     repo.mkdir(parents=True)
     # The fixture's own git ignores the developer's config (signing, hooks): run_tests.sh keeps the
     # real HOME, so a global commit.gpgsign would otherwise prompt for or fail on a key.

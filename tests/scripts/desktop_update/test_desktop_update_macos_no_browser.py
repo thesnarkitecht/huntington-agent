@@ -47,7 +47,7 @@ def test_macos_handoff_opens_no_browser_window_when_chrome_is_default(tmp_path):
             {"LSHandlers": [{"LSHandlerURLScheme": "https", "LSHandlerRoleAll": "com.google.chrome"}]},
             f,
         )
-    install = tmp_path / "hermes-agent"
+    install = tmp_path / "huntington-agent"
     install.mkdir()
     env = {
         **os.environ,

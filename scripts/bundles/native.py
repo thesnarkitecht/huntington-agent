@@ -183,7 +183,7 @@ def _prepare_native(*, out: Path, ref: str, source: Path, cache: Path,
 
     store_dir = out / "tools"
     store_dir.mkdir(parents=True, exist_ok=True)
-    repo_dir = out / "hermes-agent"
+    repo_dir = out / "huntington-agent"
     from scripts.bundles.payload import INERT_SNAPSHOT_DIRS, snapshot
     revision = subprocess.check_output(
         ["git", "rev-parse", "--verify", f"{ref}^{{commit}}"], cwd=source,

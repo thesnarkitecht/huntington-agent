@@ -87,7 +87,10 @@ def test_followers_survive_compression_and_restart_in_order_exactly_once(tmp_pat
         'model': {'provider': 'custom', 'default': 'original', 'base_url': url, 'context_length': 64000},
         'auxiliary': {'title_generation': {'enabled': False},
                       'compression': {'provider': 'custom', 'model': 'summary', 'base_url': url}},
-        'compression': {'protect_first_n': 1, 'protect_last_n': 2, 'threshold_tokens': 12000,
+        # Each PRESSURE turn adds ~3.6k tokens, so the preflight before PRESSURE_4 (~15.5k) crosses
+        # the threshold and the one before PRESSURE_3 (~11.9k) does not. 12000 sat ~100 tokens above
+        # PRESSURE_3: a longer temp path in the system prompt (CI runners) compacted a turn early.
+        'compression': {'protect_first_n': 1, 'protect_last_n': 2, 'threshold_tokens': 13000,
                         'threshold': 0.5, 'in_place': False},
         'platform_toolsets': {'cli': []}}))
     (home / 'models_dev_cache.json').write_text(json.dumps({'custom': {'id': 'custom', 'models': {

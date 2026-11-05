@@ -164,6 +164,10 @@ _SUBCOMMANDS = {
 
 def portal_command(args) -> int:
     """Top-level dispatch for `hermes portal <subcommand>`."""
+    from hermes_cli.huntington import PORTAL_UNAVAILABLE, provider_supported
+    if not provider_supported("nous"):
+        print(PORTAL_UNAVAILABLE, file=sys.stderr)
+        return 1
     sub = getattr(args, "portal_command", None)
     handler = _SUBCOMMANDS.get(sub)
     if handler is not None:

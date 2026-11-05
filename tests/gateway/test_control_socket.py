@@ -90,7 +90,7 @@ def test_client_resolution_prefers_direct_then_pointer(home: Path, tmp_path: Pat
 def test_windows_pipe_name_is_stable_and_home_scoped(tmp_path: Path):
     a = windows_pipe_name(tmp_path / "a")
     b = windows_pipe_name(tmp_path / "b")
-    assert a.startswith(r"\\.\pipe\hermes-gateway-")
+    assert a.startswith(r"\\.\pipe\huntington-gateway-")
     assert a != b
     assert a == windows_pipe_name(tmp_path / "a")
 
@@ -395,7 +395,7 @@ def _fake_identity(pid: int, sha: str):
         "code_sha": sha,
         "code_version": "9.9.9",
         "supervisor": "systemd",
-        "kind": "hermes-gateway",
+        "kind": "huntington-gateway",
     }
 
 
@@ -417,7 +417,7 @@ def test_collect_fleet_versions_prefers_socket(tmp_path: Path, monkeypatch):
     )
     # stale state file that would report a WRONG pid — socket must win
     (home / "gateway_state.json").write_text(
-        json.dumps({"pid": 1, "code_sha": "stalefile", "kind": "hermes-gateway"})
+        json.dumps({"pid": 1, "code_sha": "stalefile", "kind": "huntington-gateway"})
     )
     monkeypatch.setattr(
         "gateway.control_socket.identify_gateway",
@@ -465,7 +465,7 @@ def test_collect_fleet_versions_falls_back_to_state_file(tmp_path: Path, monkeyp
             {
                 "pid": os.getpid(),  # a live pid so _pid_exists passes
                 "code_sha": "OLDSHA",
-                "kind": "hermes-gateway",
+                "kind": "huntington-gateway",
             }
         )
     )

@@ -386,7 +386,7 @@ def test_blessed_legacy_install_is_adopted_before_sync(tmp_path, monkeypatch, co
     home = tmp_path / "home"
     monkeypatch.setenv("HERMES_HOME", str(home))
     monkeypatch.delenv("HERMES_DISABLE_LAZY_INSTALLS", raising=False)
-    root = home / "hermes-agent"
+    root = home / "huntington-agent"
     root.mkdir(parents=True)
     (root / ".git").mkdir()
     (root / "pyproject.toml").write_text("[project]\n")

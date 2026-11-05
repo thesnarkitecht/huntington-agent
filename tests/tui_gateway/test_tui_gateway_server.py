@@ -980,7 +980,7 @@ def test_completion_cwd_prefers_launch_config_over_stale_env(monkeypatch, tmp_pa
     """
     configured = tmp_path / "omni"
     configured.mkdir()
-    stale = tmp_path / "hermes-agent"
+    stale = tmp_path / "huntington-agent"
     stale.mkdir()
     launch_home = _write_profile_cfg(tmp_path / "launch-home", str(configured))
 

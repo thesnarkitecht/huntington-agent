@@ -586,6 +586,7 @@ build-backend = "setuptools.build_meta"
 [project.scripts]
 hermes = "hermes_cli.main:main"
 huntington = "hermes_cli.main:main"
+huntington-acp = "acp_adapter.entry:main"
 hermes-agent = "agent.legacy_cli:main"
 hermes-acp = "acp_adapter.entry:main"
 
